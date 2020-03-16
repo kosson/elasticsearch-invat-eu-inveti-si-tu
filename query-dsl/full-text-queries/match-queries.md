@@ -17,7 +17,7 @@ Acest tip de interogare este unui standard pentru căutările full-text, incluz�
 
 Parametrul top-level este numele câmpului în care se va face căutarea.
 
-## Parametrii lui <field>
+## Parametrii lui `<field>`
 
 ### `query`
 
