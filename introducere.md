@@ -1,4 +1,4 @@
-# Despre Elastisearch
+# Despre Elasticsearch
 
 Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea text, fie numerice. Elasticsearch este scris în Java și folosește la rândul său Apache Lucene. Adesea veți realiza ca Elasticsearch este parte a unei suite software numite generic Elastic Stack. Componentele acestei suite sunt:
 
@@ -9,6 +9,10 @@ Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea tex
 - X-Pack
 
 Suita Elastic folosește un limbaj propriu utilizat la interogare numit *Query DSL* (Domain Specific Language). În esență acesta constă dintr-un obiect JSON care parametrează căutarea.
+
+Datele stau în ceea ce se numește **nod**. Aceste noduri permit o scalare orizontală. Mai multe noduri constituie un **cluster**. Clusterele sunt complet independente unele de celelalte. În Elastisearch datele sunt numite **documente**. Documentele sunt organizate în **indecși**, care au rolul de a grupa logic documentele care sunt similare.
+
+Interogarea unei instanțe de Elastisearch se face printr-un REST API. Datele de interogare sunt în format JSON.
 
 ## Descrierea componentelor
 
@@ -46,7 +50,7 @@ Sunt pachete software care trimit date către Elasticsearch. Acești adevărați
 - Auditbeat colectează informații necesare auditării sistemelor LINUX/GNU;
 - Hearbeat monitorizează prezența servicului.
 
-## Documente în Elasticsearch
+## Sharding
 
-În Elastisearch datele sunt numite **documente**.
-Interogarea unei instanțe de Elastisearch se face printr-un REST API. Datele de interogare sunt în format JSON.
+Modul prin care se face spargerea indicilor în mai multe fragmente mici se numește sharding. Această operațiune se petrece la nivel de index. În cazul unui index cu peste un miliard de documente, această măsură este necesară. Shardingul permite scalarea pe orizontală a volumului de date. Aceste fragmente (*shards*) pot fi distribuite pe mai multe noduri. De exemplu, în cazul în care ai două noduri, fiecare cu o dimensiune mai mică decât a unui indice, acesta va putea fi spart în două shard-uri. Fiecare va sta pe câte un nod separat.
+Fiecare shard este, de fapt un indice Apache Lucene. Un shard poate stoca până la două miliarde de documente.
