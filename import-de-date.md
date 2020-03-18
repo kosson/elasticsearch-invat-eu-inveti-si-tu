@@ -39,7 +39,7 @@ curl -H 'Content-Type: application/json' -XPUT 'localhost:9200/movies/_doc/_bulk
 
 ## Introducerea unei singure înregistrări
 
-Pentru a introduce o singură înregistrare, aceasta poate fi introdusă direct din linie de comandă folosind curl.
+Pentru a introduce o singură înregistrare, aceasta poate fi introdusă direct din linie de comandă folosind `curl`.
 
 ```bash
 curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/movies/movie/109487 -d '
@@ -117,5 +117,3 @@ Dacă vei interoga indexul pentru a vedea strucura sa, vei obseva că s-au mai a
     }
 }
 ```
-
-

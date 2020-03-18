@@ -1,6 +1,6 @@
 # Mappings
 
-Înainte de a introduce date în Elasticsearch, trebuie să ai un mapping care definește structura datelor încărcate. De cele mai multe ori, Elasticsearch va deduce ce tipuri de date folosești și va crea un mapping necesar.
+Înainte de a introduce date în Elasticsearch, trebuie să ai un mapping care definește structura datelor încărcate. De cele mai multe ori, Elasticsearch va deduce ce tipuri de date folosești și va crea un mapping necesar. Adu-ți aminte că pentru a face mapping-ul ai nevoie ca indexul să existe: `PUT /movies`, de exemplu.
 
 Un mapping constituie o definire de schemă a datelor (*schema definition*). Aceast mapping îi spune lui Elasticsearch cum să introducă datele. Fii foarte atent pentru că începând cu versiunea 6 a lui Elasticsearch, `curl` are nevoie să-i specifici headerul neapărat: `-H "Content-Type: application/json"`.
 
@@ -17,6 +17,46 @@ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/numeindex -d '
         }
     }
 }'
+```
+
+În exemplul de mai sus, maparea propriu-zisă se face în obiectul care este valoarea lui `properties`. Trebuie indicat și faptul că pentru a introduce obiectul de mapare în Elasticsearch pentru un anumit index, se va folosi verbul `PUT`. În cazul în care aveți la îndemână Kibana, puteți introduce mapările folosind `Dev Tools`. După introducerea obiectului de mapare, o interogare cu `GET` pe endpointul `_mappings` a indexului dorit. De exemplu:
+
+```yaml
+PUT /movies/_mapping
+{
+  "properties": {
+      "id": {"type": "integer"},
+      "year": { "type":"date" },
+      "genre": {"type": "keyword"},
+      "title": {"type": "text", "analyzer": "english"}
+  }
+}
+```
+
+Pentru a observa ce mappinguri au fost făcute, se poate rula din Dev Tools (Kibana) comanda `GET /movies/_mapping`. Obiectul de răspuns poate fi similar cu:
+
+```json
+{
+  "movies" : {
+    "mappings" : {
+      "properties" : {
+        "genre" : {
+          "type" : "keyword"
+        },
+        "id" : {
+          "type" : "integer"
+        },
+        "title" : {
+          "type" : "text",
+          "analyzer" : "english"
+        },
+        "year" : {
+          "type" : "date"
+        }
+      }
+    }
+  }
+}
 ```
 
 Mapping-urile se folosesc în mai multe scopuri.
@@ -47,6 +87,87 @@ Dacă dorești ca un câmp să fie indexabil, poți specifica acest lucru.
 
 Dacă este `true`, acest câmp va apărea în indexul inversat (*inverted index*).
 
+## Parametrii mapping-ului
+
+Parametrii pot fi specificați pentru fiecare câmp indicând comportamentul Elasticsearch atunci când primește date pentru a le transforma în documente ale indexului.
+
+### `coerce`
+
+Acest parametru când are valoarea `true`, va *converti* valorile care seamnănă a fi numere în numere. O valoare venită ca string `"10.2"`, va fi convertită la `10.2`.
+
+### `copy_to`
+
+Permite crearea de câmpuri custom. Acest parametru îi specifică lui Elasticsearch să copieze o valoare într-un anumit câmp.
+
+```json
+{
+  "nume": {
+    "type":"text",
+    "copy_to":"numecomplet"
+  },
+  "prenume": {
+    "type":"text",
+    "copy_to":"numecomplet"
+  },
+  "numecomplet": {
+    "type":"text"
+  }
+}
+```
+
+### `dynamic`
+
+Activează sau dezactivează adăugarea de câmpuri documentelor sau obiectelor imbricate în mod dinamic.
+
+```json
+{
+  "mappings": {
+    "default": {
+      "dynamic": false,
+      "properties":{
+        "nume":{
+          "dynamic": true,
+          "properties": {}
+        }
+      }
+    }
+  }
+}
+```
+
+### `norms`
+
+Dacă `true`, va marca respectivul câmp ca fiind relevant pentru a calcula scorul de relevanță. Nu poți activa `norms` mai târziu fără a reface indexul.
+
+### `format`
+
+Definește formatul datelor calendaristice. Posibilele valori sunt:
+
+- "yyyy-MM-dd",
+- "epoch_millis",
+- "epoch_second".
+
+Valoarea din oficiu este "strict_date_optional_time||epoch_millis".
+
+### `null_value`
+
+Dacă unul din câmpuri primește o valoare null la venirea datelor, valoarea acestuia va fi completată cu valoarea lui `null_value`.
+
+```json
+{
+  "properties": {
+    "likes": {
+      "type": "integer",
+      "null_value":0
+    }
+  }
+}
+```
+
+### `fields`
+
+Acest parametru este folosit pentru a indexa câmpurile în diferite feluri.
+
 ## Cum sunt analizate câmpurile
 
 La momentul în care sunt inițiate căutările pe câmpuri, rezultatele returnate pot fi modelate chiar de la bun început, atunci când este constituit `mapping`-ul pentru respectivele documente. În următorul exemplu, sunt definite câmpurile prin indicarea tipurilor lor și apoi sunt aplicate constrângerile de regăsire impuse prin analizoare.
@@ -69,7 +190,7 @@ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/movies -d '
 
 #### `"type":"date"`
 
-Este un câmp care așteaptă ca fosrmatul introdus să fie de tip Date.
+Este un câmp care așteaptă ca formatul introdus să fie de tip `Date`.
 
 #### `"type":"keyword"`
 
@@ -77,7 +198,11 @@ Acest tip specifică faptul că la momentul căutării, va trebui să fie trimis
 
 #### `"type": "text"`
 
-Acest tip este ceva mai iertător în ceea ce privește rezultatele returnate, permițând și definirea unuor analizori.
+Acest tip este ceva mai iertător în ceea ce privește rezultatele returnate, permițând și definirea unor analizori.
+
+## Modificarea unui mapping
+
+Modificarea mapărilor pentru câmpurile existente pentru care s-a făcut mapare deja, nu se mai poate face. Încercarea de a face acest lucru se va solda cu eșec. Pentru a face acest lucru, ar trebui să ștergem indexul, să facem unul noi cu noi mapări și apoi să reindexăm datele.
 
 ### Analizoare
 
@@ -168,7 +293,7 @@ curl -H 'Content-Type: application/json' -XGET 'localhost:9200/shakespeare/?pret
 
 Să presupunem că în cazul unei francize de film așa cum este Star Wars avem mai multe filme. Pentru fi mai rapid în ceea ce privește aducerea documentelor cu cât mai multe informații, fără a interoga de două ori baza, odată pentru franchise și apoi un matching pe copiii care au setată respectiva franciza, se poate proceda la o denormalizare a datelor în sensul că pentru fiecare film putem introduce și franciza și astfel, nu facem două interogări. Acesta este cazul ținerii datelor într-o formă denormalizată. Spațiul de depozitare este ieftin și nu mai trebuie făcute normalizări la sânge în defavoarea timpilor de acces și numărul de atingeri ale bazei.
 
-Totuși, Elasticsearch permite relații parent -child, dacă se dorește realizarea unui astfel de index.
+Totuși, Elasticsearch permite relații parent-child, dacă se dorește realizarea unui astfel de index.
 
 ```bash
 curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/series -d '{
@@ -184,6 +309,7 @@ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/series -d '{
   }
 }'
 ```
+
 Cu răspunsul `{"acknowledged":true,"shards_acknowledged":true,"index":"series"}`.
 
 *Franchise* va avea drept copii *films*.
