@@ -46,7 +46,7 @@ Filtrările folosite frecvent sunt cache-uite de Elasticsearch.
 
 O filtrare este pasată unui parametru `filter`.
 
-## Exemplu de contexte query și filter
+## Exemplu de contexte `query` și `filter`
 
 Parametrul `query` indică contextul de interogare.
 Termenul `bool` urmat de cele două `must`-uri, este folosit într-un context query, însemnând că este folosit pentru a căuta cât de bine se potrivesc rezultatele.

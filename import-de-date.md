@@ -34,7 +34,7 @@ curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/_bulk -d '
 Pentru a încărca, rulează comanda:
 
 ```bash
-curl -H 'Content-Type: application/json' -XPUT 'localhost:9200/movies/_doc/_bulk?pretty' --data-binary @movies.json
+curl -XPOST -H "Content-Type: application/x-ndjson" "127.0.0.1:9200/recipe/_doc/_bulk" --data-binary @movies.json
 ```
 
 ## Introducerea unei singure înregistrări

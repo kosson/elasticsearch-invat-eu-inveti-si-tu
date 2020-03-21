@@ -1,8 +1,36 @@
 # Mappings
 
-Înainte de a introduce date în Elasticsearch, trebuie să ai un mapping care definește structura datelor încărcate. De cele mai multe ori, Elasticsearch va deduce ce tipuri de date folosești și va crea un mapping necesar. Adu-ți aminte că pentru a face mapping-ul ai nevoie ca indexul să existe: `PUT /movies`, de exemplu.
+Înainte de a introduce date în Elasticsearch, trebuie să ai un mapping care definește structura datelor încărcate. Poți să te gândești la mapping ca la un plan de construcție a unui index. Fiecare index are un *mapping type* care **determină cum vor fi indexate documentele**.
 
-Un mapping constituie o definire de schemă a datelor (*schema definition*). Aceast mapping îi spune lui Elasticsearch cum să introducă datele. Fii foarte atent pentru că începând cu versiunea 6 a lui Elasticsearch, `curl` are nevoie să-i specifici headerul neapărat: `-H "Content-Type: application/json"`.
+De cele mai multe ori, Elasticsearch va deduce ce tipuri de date folosești și va crea un mapping necesar. Adu-ți aminte că pentru a face mapping-ul ai nevoie ca indexul să existe: `PUT /movies`, de exemplu.
+
+Un mapping constituie o definire de schemă a datelor (*schema definition*). Aceast mapping îi spune lui Elasticsearch cum să introducă datele pentru a fi indexate. Un *mapping type* este compus din:
+
+- Meta-fields
+- Fields
+
+Meta-fields sunt câmpuri folosite pentru a atașa metadate necesare descrierii unui document în interiorul indexului. Câmpurile sunt:
+
+- `_index`,
+- `_type`,
+- `_id`,
+- `_source`.
+
+Fields (*câmpuri*) sunt proprietățile documentului în sine. Fiecare câmp va înmagazina un anumit tip de date. Cele simple sunt:
+
+- `text`,
+- `keyword`,
+- `date`,
+- `long`,
+- `double`,
+- `boolean`,
+- `ip`.
+
+Apoi pot fi obiecte care suportă structura ierarhică a unui obiect JSON precum `object` și `nested`.
+
+Sunt și tipuri de câmpuri specializate precum `geo_point`, `geo_shape` sau `completion`.
+
+Fii foarte atent pentru că începând cu versiunea 6 a lui Elasticsearch, `curl` are nevoie să-i specifici headerul neapărat: `-H "Content-Type: application/json"`.
 
 ```bash
 curl -H "Content-Type: application/json" -XPUT 127.0.0.1:9200/numeindex -d '
@@ -421,3 +449,8 @@ Este returnat un rezultat asemănător cu următorul obiect:
   }
 }
 ```
+
+## Resurse
+
+- [Mapping | Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/mapping.html)
+- [Removal of mapping types | Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/removal-of-types.html)
