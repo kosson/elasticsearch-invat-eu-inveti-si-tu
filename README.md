@@ -1,4 +1,4 @@
-# elasticsearch-invat-eu-inveti-si-tu
+# Elasticsearch-invat-eu-inveti-si-tu
 
 Elasticsearch învăț eu, înveți și tu este o colecție structurată de texte care lămuresc subiecte legate de folosirea stivei ELK.
 
