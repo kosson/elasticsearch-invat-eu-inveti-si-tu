@@ -1,14 +1,17 @@
 # Căutare în Elasticsearch
 
-Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele contexte de căutare.
+Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat de contextele de căutare acestea pot fi două:
 
-Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o căutare *match query* mai întâi va face o analiză a textului și abia după aceea va căuta în indexul inversat. Căutarea va aduce rezultate în al doilea caz pentru că anterior și textul documentelor a trecut prin același proces de analiză (analizorul folosit pentru câmp este același și pentru textul de căutare).
+- *query context* (se calculează relevanța)
+- *filter context* (se verifică dacă documentul există, nu se calculează relevanța).
 
 Un alt aspect important al căutărilor pe care le poți face pe documentele din Elasticsearch este acela că rezultatele vor fi aduse înapoi în ordinea relevanței lor. Relevanța este un număr calculat de Elasticsearch. Într-un context de filtrare, nu este calculată relevanța documentelor.
 
+Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o căutare *match query* mai întâi va face o analiză a textului și abia după aceea va căuta în indexul inversat. Căutarea va aduce rezultate în al doilea caz pentru că anterior și textul documentelor a trecut prin același proces de analiză (analizorul folosit pentru câmp este același și pentru textul de căutare).
+
 În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp de text, dar și ca un câmp keyword. Elastisearch realizează acest lucru printr-un mapping dinamic.
 
-## Căutare prin obiect
+## Modele de căutare
 
 ### Căutare după un câmp
 
