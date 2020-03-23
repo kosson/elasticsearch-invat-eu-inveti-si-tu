@@ -17,7 +17,7 @@ Acest tip de interogare este unui standard pentru căutările full-text, incluz�
 
 Parametrul top-level este numele câmpului în care se va face căutarea.
 
-## Parametrii lui `<field>`
+## Parametrii câmpului
 
 ### `query`
 
@@ -33,7 +33,7 @@ Este un boolean opțional. Dacă are valoarea `true`, sunt create automat intero
 
 ### `fuzziness`
 
-Este un string care poate fi introdus opțional. Aceasta este distanța maximă cu care numărul de caractere poate diferi față de căutarea exactă a termenului.
+Este un string care poate fi introdus opțional. Aceasta este distanța maximă cu care numărul de caractere poate diferi față de căutarea exactă a termenului. Cel mai bine este ca această opțiune să fie setată la valoarea `auto`.
 
 ## Resurse
 

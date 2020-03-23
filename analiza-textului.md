@@ -623,3 +623,133 @@ Rezultatul poate fi similar cu următorul obiect.
 ```
 
 Se observă că atricularea substantivelor a dispărut, dar sunt mici deviații, precum în cazul lui `limbă` -> `limb`.
+
+## Stemming
+
+Pentru exemplificare, vom configura un stemmer particularizat pentru limba română.
+
+```json
+PUT /stemming_test/
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "testare_sinonime": {
+          "type": "synonym",
+          "synonyms": [
+            "frumos => chipeș",
+            "plăcea, dori"
+          ]
+        },
+        "testare_stemmer": {
+          "type": "stemmer",
+          "name": "romanian"
+        }
+      },
+      "analyzer": {
+        "analizor_propriu": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "testare_sinonime",
+            "testare_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "descriere": {
+        "type": "text",
+        "analyzer": "analizor_propriu"
+      }
+    }
+  }
+}
+```
+
+Apoi vom introduce un document în indexul nou creat.
+
+```json
+POST /stemming_test/_doc/1
+{
+  "descriere": "Acest test frumos este unul util și plin de lucruri interesante pentru a fi observate. Unele lucruri nu snt tocmai plăcute când rulezi teste."
+}
+```
+
+Răspunsul este similar cu următorul obiect:
+
+```json
+{
+  "_index" : "stemming_test",
+  "_type" : "_doc",
+  "_id" : "1",
+  "_version" : 1,
+  "result" : "created",
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  },
+  "_seq_no" : 0,
+  "_primary_term" : 1
+}
+```
+
+Să creăm o interogare pentru documentul indexat:
+
+```json
+GET /stemming_test/_search
+{
+  "query": {
+    "match": {
+      "descriere": "test chipeș"
+    }
+  },
+  "highlight": {
+    "fields": {
+      "descriere": {}
+    }
+  }
+}
+```
+
+Rezultatul indică faptul că documentul a fost găsit în baza sinonimelor.
+
+```json
+{
+  "took" : 2,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 0.68324494,
+    "hits" : [
+      {
+        "_index" : "stemming_test",
+        "_type" : "_doc",
+        "_id" : "1",
+        "_score" : 0.68324494,
+        "_source" : {
+          "descriere" : "Acest test frumos este unul util și plin de lucruri interesante pentru a fi observate. Unele lucruri nu snt tocmai plăcute când rulezi teste."
+        },
+        "highlight" : {
+          "descriere" : [
+            "Acest <em>test</em> <em>frumos</em> este unul util și plin de lucruri interesante pentru a fi observate.",
+            "Unele lucruri nu snt tocmai plăcute când rulezi <em>teste</em>."
+          ]
+        }
+      }
+    ]
+  }
+}
+```

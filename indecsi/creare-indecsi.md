@@ -42,6 +42,68 @@ GET /pufi*/_alias/toti_pufii
 }
 ```
 
+## Configurarea indecșilor
+
+La momentul creării, indecșii pot fi configurați fiind disponibile trei proprietăți specifice obiectului de configurare:
+
+- `aliases`,
+- `mapping` și
+- `settings`.
+
+Proprietatea `settings` permite introducerea unui obiect de configurare. Printre proprietățile utile sunt este `analysis` cu ajutorul căreia se introduce un obiect de configurare ce indică cum se va face analiza textului unui document care ajunge în index.
+
+Proprietăți lui `analysis`:
+
+- `analyzer`,
+- `char_filter`,
+- `filter`,
+- `tokenizer`.
+
+Poți configura propriile filtre sau tokenizere și chiar stemmere. Dacă dorești, poți numi așa cum îți place aceste părți configurabile, dar va trebui să specifici în obiectul drept valoare tipu de obiect de configurare pe care îl setezi prin precizarea `"type":"stemmer"` sau `"type":"synonyms"`, etc.
+
+Un exemplu:
+
+```json
+PUT /stemming_test/
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "testare_sinonime": {
+          "type": "synonym",
+          "synonyms": [
+            "frumos => chipeș",
+            "plăcea, dori"
+          ]
+        },
+        "testare_stemmer": {
+          "type": "stemmer",
+          "name": "romanian"
+        }
+      },
+      "analyzer": {
+        "analizor_propriu": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "testare_sinonime",
+            "testare_stemmer"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "descriere": {
+        "type": "text",
+        "analyzer": "analizor_propriu"
+      }
+    }
+  }
+}
+```
+
 ## Referințe
 
 - [Create index API | Index APIs | Elasticsearch Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html)
