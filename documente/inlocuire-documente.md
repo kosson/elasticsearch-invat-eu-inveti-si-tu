@@ -1,5 +1,7 @@
 # Înlocuirea documentelor
 
+Pentru înlocuirea documentelor se va folosi endpoint-ul `_doc`.
+
 Acest lucru se face folosind verbul `PUT` precum în exemplul de mai jos:
 
 ```yaml

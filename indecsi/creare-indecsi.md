@@ -4,7 +4,7 @@ Cel mai simplu mod de a crea un index este să îl creezi cu un `PUT /nume_index
 
 Acest index va avea starea *yellow* pentru simplu motiv că nu a avut un node căruia să-i trimită replica shard-ul. Din acest motiv, starea este yellow. Atunci când este creat un alt nod, se va aloca replica shard-urile și starea va fi green.
 
-Pentru a verifica numărul și starea indecșilor creați, se va folosi comanda `GET /_cat/indices?v`, care va indica informații foarte utile privind alocarea shard-urilor primare, replicile, starea indicelui și chiar și numărul de documente dintr-un indice.
+Pentru a verifica numărul și starea indecșilor creați, se va folosi comanda `GET /_cat/indices?v`, care va indica informații foarte utile privind alocarea shard-urilor primare, replicile, starea indexului și chiar numărul de documente dintr-un index.
 
 ## Reguli de scriere a numelui indexului
 
@@ -59,7 +59,7 @@ Proprietăți lui `analysis`:
 - `filter`,
 - `tokenizer`.
 
-Poți configura propriile filtre sau tokenizere și chiar stemmere. Dacă dorești, poți numi așa cum îți place aceste părți configurabile, dar va trebui să specifici în obiectul drept valoare tipu de obiect de configurare pe care îl setezi prin precizarea `"type":"stemmer"` sau `"type":"synonyms"`, etc.
+Poți configura propriile filtre sau tokenizere și chiar stemmere. Dacă dorești, poți numi așa cum îți place aceste părți configurabile, dar va trebui să specifici în obiectul drept valoare tipul de obiect de configurare pe care îl setezi precizând `"type":"stemmer"` sau `"type":"synonyms"`, etc.
 
 Un exemplu:
 

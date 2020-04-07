@@ -1,6 +1,6 @@
 # Despre Elasticsearch
 
-Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea text, fie numerice. Elasticsearch este scris în Java și folosește la rândul său Apache Lucene. Adesea veți realiza ca Elasticsearch este parte a unei suite software numite generic Elastic Stack. Componentele acestei suite sunt:
+Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea text, fie numerice. Elasticsearch este scris în Java și folosește la rândul său Apache Lucene. Adesea veți realiza că Elasticsearch este parte a unei suite software numite generic Elastic Stack. Componentele acestei suite sunt:
 
 - Elastisearch,
 - Logstash,
@@ -49,8 +49,3 @@ Sunt pachete software care trimit date către Elasticsearch. Acești adevărați
 - Winlogbeat colectează loguri specifice sistemului de operare Windows;
 - Auditbeat colectează informații necesare auditării sistemelor LINUX/GNU;
 - Hearbeat monitorizează prezența servicului.
-
-## Sharding
-
-Modul prin care se face spargerea indicilor în mai multe fragmente mici se numește sharding. Această operațiune se petrece la nivel de index. În cazul unui index cu peste un miliard de documente, această măsură este necesară. Shardingul permite scalarea pe orizontală a volumului de date. Aceste fragmente (*shards*) pot fi distribuite pe mai multe noduri. De exemplu, în cazul în care ai două noduri, fiecare cu o dimensiune mai mică decât a unui indice, acesta va putea fi spart în două shard-uri. Fiecare va sta pe câte un nod separat.
-Fiecare shard este, de fapt un indice Apache Lucene. Un shard poate stoca până la două miliarde de documente.

@@ -1,6 +1,6 @@
 # Boolean query - `bool`
 
-Este o interogare care caută documente prin combinarea booleană a altor interogări. Un query `bool` se va executa într-o abordare **more-matches-is-better**. Această abordare implică faptul că fiecare aplicare a unor cerințe `should` sau `must`, vor adăuga la scorul total al documentelor găsite. Pentru ca documentele să fie găsite, trebuie să satisfacă toate cerințele query-urilor specificate în `must`. Documentelor care au fost găsite li se face și un ranking pentru cât de bine satisfăcut cerințele.
+Este o interogare care caută documente prin combinarea booleană a altor interogări. Un query `bool` se va executa într-o abordare **more-matches-is-better**. Această abordare implică faptul că fiecare aplicare a unor cerințe `should` sau `must`, vor adăuga la scorul total al documentelor găsite. Pentru ca documentele să fie găsite, trebuie să satisfacă toate cerințele query-urilor specificate în `must`. Documentelor găsite li se face și un ranking pentru cât de bine au satisfăcut cerințele.
 
 Un exemplu rapid ar fi să caut într-un index cu piese auto un carburator care să fie marca Solex și să aibă diametrul mai mare de 114, dar nu mai mare de 210. În cazul în care originea carburatorului este Franța, scorul ranking-ului va fi crescut pentru că este o opțiune ce a fost satisfăcută și ea. Rolul lui `should` este să influiențeze scorul ranking-ului.
 
@@ -36,9 +36,9 @@ GET /piese/_search
 }
 ```
 
-În cazul în care `bool` se află într-un context de filtrare, `should` trebuie satisfăcut. În cazul în care într-un bool avem un singur should, acesta devine element mandatoriu să fie satisfăcut. Specificarea query-urilor într-un array permite mai multe query-uri de același tip. Dacă lui `must` i se asociază un obiect, acest lucru nu mai este posibil.
+În cazul în care `bool` se află într-un context de filtrare, `should` trebuie satisfăcut. În cazul în care într-un `bool` avem un singur `should`, acesta devine element care trebui satisfăcut. Specificarea query-urilor într-un array permite mai multe query-uri de același tip. Dacă lui `must` i se asociază un obiect, acest lucru nu mai este posibil.
 
-În cazul în care vrei să vezi ce impact au fiecare dintre etapele de query, trebuie să le dai câte un nume cu ajutorul căruia să identifici în rezultate etapele.
+În cazul în care vrei să vezi ce impact au fiecare dintre etapele de *query*, trebuie să le dai câte un nume cu ajutorul căruia să identifici în rezultate etapele.
 
 ```yaml
 GET /piese/_search

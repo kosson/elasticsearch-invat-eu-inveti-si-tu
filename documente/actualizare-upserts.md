@@ -1,6 +1,7 @@
 # Upserts
 
-Dacă documentul există, scriptul va fi rulat. Dacă nu există, va fi creat.
+Upsert-urile folosesc endpointul `_update`.
+Regula este simplă: dacă documentul există, scriptul va fi rulat. Dacă nu există, va fi creat.
 
 ```yaml
 POST /miscelanee/_update/100

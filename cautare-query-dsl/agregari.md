@@ -1,6 +1,49 @@
 # Agregări
 
-Sunt un mod de a extrage sau grupa date statistice.
+## Introducere
+
+Sunt un mod de a extrage sau grupa date statistice. Ceea ce se poate face folosind agregările, depășește cu mult sfera unor simple statistici. Poți calcula diverse metrici (average, statiscici, min/max, procente), poți introduce datele în așa-numite *buckets* utile pentru constituirea unor histograme, afișarea unor intervale, distanțe, termeni cu anumite semnificații care apar în documente. Se pot realiza chiar *pipelines* care permit manipularea mediilor (*moving averages*) sau poți calcula sume cumulative. Mai nou, Elasticsearch permite calcule la nivel matriceal.
+
+Atunci când este necesar, poți să faci imbricare a agregărilor.
+
+Atunci când construiești o agregare, proprietatea care marchează query-ul este `aggs`. Aceasta la rândul ei structurează agregarea printr-un obiect al cărui fiecare proprietate este un nume pe care-l alegi să reprezinte un bucket, de exemplu, un identificator pe care să-l poți referi mai departe.
+
+De exemplu, să facem o agregare simplă numită `aprecieri`.
+
+```yaml
+GET /rating/_search
+{
+  'size': 0,
+  'aggs': {
+    'aprecieri': {
+      'terms': {
+        'field': 'rating'
+      }
+    }
+  }
+}
+```
+
+Ca efect, vom obține toate documentele care au valori în câmpul `rating`. Pentru a restrânge setul luat în calcul pentru analiză, vom mai adăuga un `query` la `aggs`, precum mai jos pentru a restrânge agregarea doar la documentele care au un `rating` de cel puțin valoarea `5.0`.
+
+```yaml
+GET /rating/_search
+{
+  'size': 0,
+  'query': {
+    'match': {
+      'rating': 5.0
+    }
+  },
+  'aggs': {
+    'aprecieri': {
+      'terms': {
+        'field': 'rating'
+      }
+    }
+  }
+}
+```
 
 ## Metric aggregations
 
@@ -17,6 +60,27 @@ GET /produse/_search
     "numar_cocumente": {
       "value_count": {
         "field": "year"
+      }
+    }
+  }
+}
+```
+
+Un alt exemplu, ar fi să obținem documentele care au rating pentru un anume fragment de text căutat.
+
+```yaml
+GET /rating/_search
+{
+  'size': 0,
+  'query': {
+    'match_phrase': {
+      'title': 'Star Wars Imperiul Contraatacă'
+    }
+  },
+  'aggs': {
+    'aprecieri': {
+      'terms': {
+        'field': 'rating'
       }
     }
   }
@@ -275,6 +339,52 @@ GET /movies/_search
   }
 }
 ```
+
+Se poate face și un query pentru a reduce numărul de rezultate.
+
+```json
+"query": {
+  "match_phrase": {
+    "title": "Amintiri din copilărie"
+  }
+},
+"aggs": {
+  "titluri": {
+    "terms": {
+      "field": "titlu.original"
+    },
+    "aggs": {
+      "media_ratingurilor": {
+        "avg": {
+          "field": "aprecieri"
+        }
+      }
+    }
+  }
+}
+```
+
+Pentru a constitui bucket-uri pe titluri complete și nu pe termenii separați, va trebui creată o schemă de mapping care să ia acest lucru în considerare la momentul indexării.
+
+```json
+{
+  "mapping": {
+    "properties": {
+      "titlu": {
+        "type": "text",
+        "fielddata": true,
+        "fields": {
+          "original": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Creând `"type": "keyword"` menționăm faptul că dorim în index să existe o înregistrare cu fragmentul de text ce reprezintă titlul.
 
 ### Range aggregations
 
@@ -552,6 +662,51 @@ GET /movies/_search
   }
 }
 ```
+
+O histogramă afișează numărul total de documente care au fost introduse într-un bucket în baza unui range.
+
+```json
+"aggs": {
+    "ratinguri_intregi": {
+        "histogram": {
+            "field": "rating",
+            "interval": 1.0
+          }
+      }
+  }
+```
+
+O altă histogramă penru a vedea câte filme au fost produse la fiecare 10 ani.
+
+```json
+"aggs": {
+    "premiere": {
+        "histogram": {
+            "field": "ani",
+            "interval": 10
+          }
+      }
+  }
+```
+
+### Serii temporale
+
+```yaml
+"aggs": {
+    "query": {
+        "match": {
+            "agent": "Googlebot"
+          }
+      },
+    "timestamp": {
+        "histograma_datelor": {
+            "field": "@timestamp",
+            "interval": "hour"
+          }
+      }
+  }
+```
+
 
 ## Agregare globală
 

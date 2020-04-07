@@ -1,6 +1,6 @@
 # Ștergerea documentelor
 
-Pentru a șterge un document, se va folosi verbul `DELETE`. Ceea ce mai trebuie cunoscut este id-ul documentului.
+Pentru a șterge un document, se va folosi verbul `DELETE` și endpoint-ul `_doc`. Ce mai trebuie să știi este id-ul documentului.
 
 ```yaml
 DELETE /miscelanee/_doc/100

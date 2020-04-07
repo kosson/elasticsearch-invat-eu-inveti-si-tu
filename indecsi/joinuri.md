@@ -668,7 +668,7 @@ Vom obține un rezultat similar cu:
 }
 ```
 
-Pentru un termen mai generic precum `scoala`, am fi obținut un adevărat arbore al relațiilor. Cu cât termenul este mai specific, cu atît vom obține doar relațiile directe ale celui găsit cu părintele său.
+Pentru un termen mai generic precum `scoala`, am fi obținut un adevărat arbore al relațiilor. Cu cât termenul este mai specific, cu atât vom obține doar relațiile directe ale celui găsit cu părintele său.
 
 ## Resurse
 
