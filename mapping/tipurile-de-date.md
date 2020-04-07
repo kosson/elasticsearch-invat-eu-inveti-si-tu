@@ -175,6 +175,35 @@ Trebuie respectat ca toate valorile din array să fie de același tip. Array-uri
 
 Pentru array-urile de obiecte, vezi [nested](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/nested.html).
 
+Un exemplu care oferă claritate este cel al etichetelor aplicate unui document.
+
+```yaml
+PUT /book/_mapping
+{
+	"properties": {
+		"nume": {"type": "text"},
+		"autor": {
+			"type": "text",
+			"fields": {
+				"keyword": {
+					"type": "keyword"
+				}
+			}
+		},
+		{
+			"etichete": {
+				"type": "text",
+				"fields": {
+					"keyword": {
+						"type": "keyword"
+					}
+				}
+			}
+		}
+	}
+}
+```
+
 ## Resurse
 
 - [Field datatypes](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/mapping-types.html)

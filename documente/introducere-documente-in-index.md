@@ -1,6 +1,6 @@
 # Introducerea documentelor
 
-Pentru a introduce un document, se va folosi verbul `POST` urmat de numele indexului precum în exemplul următor.
+Pentru a introduce un document, se va folosi verbul `POST` urmat de numele indexului, precum în exemplul următor.
 
 ```yaml
 POST /nume_index/_doc

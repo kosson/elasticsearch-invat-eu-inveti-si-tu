@@ -375,7 +375,7 @@ Poți defini filtrul prin care operează tokenizatorul și cum sunt operate toke
 
 Analizoarele permit filtrarea anumitor caractere, de exemplu să convertești din HTML encoding și invers.
 
-## Crearea unui index
+## Crearea unui index cu mapping
 
 Pentru a constitui un index repede, se poate folosi *curl* din linie de comandă.
 

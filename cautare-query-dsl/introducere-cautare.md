@@ -1,6 +1,6 @@
 # Căutare în Elasticsearch
 
-Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat de contextele de căutare acestea pot fi două:
+Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat de contextele de căutare, acestea pot fi două:
 
 - *query context* (se calculează relevanța)
 - *filter context* (se verifică dacă documentul există, nu se calculează relevanța).
@@ -9,33 +9,17 @@ Un alt aspect important al căutărilor pe care le poți face pe documentele din
 
 Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o căutare *match query* mai întâi va face o analiză a textului și abia după aceea va căuta în indexul inversat. Căutarea va aduce rezultate în al doilea caz pentru că anterior și textul documentelor a trecut prin același proces de analiză (analizorul folosit pentru câmp este același și pentru textul de căutare).
 
-În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp de text, dar și ca un câmp keyword. Elastisearch realizează acest lucru printr-un mapping dinamic.
+În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elastisearch realizează acest lucru printr-un mapping dinamic (*dynamic mapping*).
 
-## Modele de căutare
-
-### Căutare după un câmp
-
-Poți face o căutare după id, dacă-l cunoști.
-
-```bash
-curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_doc/109487?pretty
-```
-
-### Căutare după un termen
-
-```bash
-curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_search?q=Interstellar
-```
-
-### Analizers and tokenizers
+## Analizers and tokenizers
 
 Căutarea pe texte folosind analizoarele, va returna rezultatele care se aseamănă cu ceea ce se caută. În funcție de setarea analizorului, rezultatele pot fi *case-insensitives*, *stemmed*, se pot elimina semnele de punctuație (*stop words*), se pot folosi sinonimele, etc. Faptul că se face o căutare cu mai multe cuvinte, nu înseamnă că trebuie să fie găsite toate într-un document pentru ca acesta să fie adus. Se vor folosi *text types* pentru respectivele câmpuri. Poți configura diferite analizoare pentru fiecare câmp în parte.
 
 În unele cazuri, căutarea trebuie să fie precisă. Doar o anumită combinație de cuvinte trebuie să fie găsită pentru a returna un document și exact combinația de majuscule. Se va folosi un *keyword type* atunci când definești un index. Folosirea acestuia va dezactiva analizoarele pentru acel câmp.
 
-#### Analizoare
+### Analizoare
 
-##### Înterogare folosind `match`.
+#### Înterogare folosind `match`.
 
 Acest tip de analizor se va folosi în cazul în care dorești să aduci toate documentele care se potrivesc cu stringul pe care-l pasezi pentru un anumit câmp.
 
@@ -108,7 +92,7 @@ Răspunsul include rezultate ce conțin cuvântul `Star`. Ceea ce este important
 }
 ```
 
-##### Interogare folosind `match_phrase`
+#### Interogare folosind `match_phrase`
 
 Este un analizor care oferă toate rezultatele care conțin fragmentul de text pasat pentru un anumit câmp pe care documentele îl au. Rezultatele vor fi alese în ordinea cuvintelor pasate. Acest lucru este posibil pentru că în indexul inversat, nu numai că se face o potrivire a termenilor dintr-un text, dar este memorată și poziția acestor termeni în text.
 
@@ -179,7 +163,7 @@ curl -H "Content-Type: application/json" -XGET 127.0.0.1:9200/movies/_search?pre
 
 În exemplul, se contruiește un `"query"` care **trebuie** să conțină **termenul** (`"term"`) trek, iar din documentele care respectă această cerință strictă se va face o **filtrare**, care să aducă doar un subset (`"range"`) de documente care au la câmpul `"year"` o valoarea mai mare sau egală (`"gte"` - greatter than equal) cu 2010.
 
-### Tipuri de filtre
+### Filtre
 
 Căutarea la nivel de termen este folosită ca atare atunci când se dorește identificarea documentelor după un anumit termen, fie acesta o valoare numerică, boolean, keyword și cam toate valorile care nu au trecut prin faza de analiză pentru că acestea sunt modificate înainte de a ajunge în indexul inversat.
 
@@ -198,7 +182,7 @@ GET /movies/_search
 }
 ```
 
-Atunci când ai un câmp cu o valoare boolean, nu mai trebuie configurat câmpul precum în următorul exemplu:
+Atunci când ai un câmp a cărui mapping s-a făcut pentru o valoare boolean, nu mai trebuie configurat câmpul precum în următorul exemplu:
 
 ```yaml
 GET /movies/_search
@@ -227,13 +211,13 @@ GET /movies/_search
 ```
 
 Ceea ce permite varianta canonică este adăugarea de opțiuni suplimentare.
-De regulă, vei folosi acest fitru pentru a căuta date calendaristice, numere, booleanuri, termeni din câmpuri cu valoare text, câmpuri de tip keyword pentru că aceste nu sunt analizate. Reține faptul că term  queries nu sunt nici ele analizate și asta oferă rezultate predictibile pentru că se face o căutare exactă.
+De regulă, vei folosi acest filtru pentru a căuta date calendaristice, numere, booleanuri, termeni din câmpuri cu valoare text, câmpuri de tip keyword pentru că aceste nu sunt analizate. Reține faptul că *term  queries* nu sunt nici ele analizate și asta oferă rezultate predictibile pentru că se face o căutare exactă.
 
 #### `terms`
 
-Adu-ți mereu aminte că În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp de text, dar și ca un câmp keyword.
+Adu-ți mereu aminte că În Elasticsearch fiecare câmp care are o valoare `text` este automat tratat deopotrivă ca un câmp de `text`, dar și ca un câmp `keyword` dacă este permisă maparea dinamică.
 
-Filtrul este folosite pentru a face filtrări după o listă de termeni menționați într-un `Array`. Documentul va fi luat în setul celor găsite dacă conține în câmpul specificat una din valorile din array.
+Filtrul este folosite pentru a face filtrări după o listă de termeni menționați într-un `Array`. Documentul va fi pus în setul celor găsite dacă conține în câmpul specificat una din valorile din array.
 
 ```yaml
 GET /movies/_search
@@ -271,7 +255,7 @@ GET /movies/_search
 }
 ```
 
-Lucrul cu datele este permis și în afara operațiunilor cu intervale. ElasticSearch folosește simbolul `||` după o dată calendaristică pentru a face calcule în baza datei specificată anterior numită *achor date*. De exemplu, poți adăuga o zi sau scădea o săptămână sau un an: `"gte":"23-03-2019||-1w"`. Dacă vreau să scad o săptămână și o zi peste: `"gte":"23-03-2019||-1w-1d"`.
+Lucrul cu datele este permis și în afara operațiunilor cu intervale. Elasticsearch folosește simbolul `||` după o dată calendaristică pentru a face calcule în baza datei specificată anterior numită *achor date*. De exemplu, poți adăuga o zi sau scădea o săptămână sau un an: `"gte":"23-03-2019||-1w"`. Dacă vreau să scad o săptămână și o zi peste: `"gte":"23-03-2019||-1w-1d"`.
 Datele calendaristice pot fi rotunjite dacă este necesar. Rotunjirea se face precizând un slash după dată și care parte să fie rotunjită: `"gte":"23-03-2019||-1w-1d/M"` - rotunjire cu luna. Rotunjirea datei poate fi făcută și la început: `"gte":"23-03-2019||/M-1w-1d"`.
 
 Dacă se dorește interogarea după momentul curent, nu mai este nevoie de `||` și se va preciza `now`: `"gte":"now-1w-1d/M"`.
@@ -493,7 +477,7 @@ GET /movies/_search
 }
 ```
 
-Căutările cu wildcardurile taxează resursele de server pentru că are de căutat o sumedenie de variante. Nu pune un wildcard sau semnul întrebării la începutul fragmentului de căutare pentru că va afecta foarte rău resursele de calcul.
+Căutările cu wildcard-urile taxează resursele de server pentru că are de căutat o sumedenie de variante. Nu pune un wildcard sau semnul întrebării la începutul fragmentului de căutare pentru că va afecta foarte rău resursele de calcul.
 
 ## Căutarea folosind expresii regulate
 
