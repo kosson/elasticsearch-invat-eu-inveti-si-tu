@@ -8,7 +8,7 @@ De cele mai multe ori, Elasticsearch va deduce ce tipuri de date folosești și 
 
 Un mapping este o schemă a datelor (*schema definition*) pe care câmpurile unui document le va găzdui. Aceast mapping îi spune lui Elasticsearch cum să introducă datele pentru a fi indexate. Un *mapping type* este compus din:
 
-- Meta-fields
+- [Meta-fields]()
 - Fields
 
 Meta-fields sunt câmpuri folosite pentru a atașa metadate necesare descrierii unui document în interiorul indexului. Câmpurile sunt:
@@ -359,7 +359,7 @@ Acest tip este ceva mai iertător în ceea ce privește rezultatele returnate, p
 
 ## Modificarea unui mapping
 
-Modificarea mapărilor pentru câmpurile existente pentru care s-a făcut mapare deja, nu se mai poate face. Încercarea de a face acest lucru se va solda cu eșec. Pentru a face acest lucru, ar trebui să ștergem indexul, să facem unul noi cu noi mapări și apoi să reindexăm datele.
+Modificarea mapărilor pentru câmpurile existente pentru care s-a făcut mapare deja, nu se mai poate face. Încercarea de a face acest lucru se va solda cu un eșec. Pentru a face acest lucru, ar trebui să ștergem indexul, să facem unul noi cu noi mapări și apoi să reindexăm datele.
 
 ### Analizoare
 
