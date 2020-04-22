@@ -6,9 +6,9 @@ Sunt un mod de a extrage sau grupa date statistice. Ceea ce se poate face folosi
 
 Atunci când este necesar, poți să faci imbricare a agregărilor.
 
-Atunci când construiești o agregare, proprietatea care marchează query-ul este `aggs`. Aceasta la rândul ei structurează agregarea printr-un obiect al cărui fiecare proprietate este un nume pe care-l alegi să reprezinte un bucket, de exemplu, un identificator pe care să-l poți referi mai departe.
+Atunci când construiești o agregare, proprietatea care marchează query-ul este `aggs`. Aceasta la rândul ei structurează agregarea printr-un obiect al cărui fiecare proprietate este un nume pe care-l alegi să denumească un bucket, de exemplu, un identificator pe care să-l poți referi mai departe.
 
-De exemplu, să facem o agregare simplă numită `aprecieri`.
+De exemplu, să facem o agregare simplă numită `aprecieri`. Agregarea o vom face la nivel de `terms`.
 
 ```yaml
 GET /rating/_search
@@ -233,6 +233,124 @@ Bucket-urile vor fi vizibile în rezultat, precum în:
 ```
 
 Bucket aggregations au ceea ce se numește nested aggregations. Bucket-urile odată constituite, pot fi folosite pentru alte agregări. Acest lucru este posibil pentru că agregările se fac în contextul în care acestea sunt cerute.
+
+Câteva reguli privind constituirea agregărilor:
+
+- agregările generează rezultate din contextul în care sunt rulate.
+- dacă ai o succesiune `query` urmată de `aggs`, agregarea se va face în contextul rezultatului adus de query.
+- Dacă ai o agregare imbricată în alta, agregarea se va face în contextul bucket-urilor care sunt generate de agregarea părinte.
+
+### Exemplu de agregare imbricată
+
+```yaml
+GET /resedus0/_search
+{
+  "size": 0,
+  "aggs": {
+      "stats_clase": {
+        "terms": {
+          "field": "level.keyword",
+          "missing": "Care nu au bucket",
+          "min_doc_count": 0,
+          "order": {
+            "_key": "asc"
+          }
+        },
+        "aggs": {
+          "discipline_stats": {
+            "terms": {
+              "field": "discipline.keyword",
+              "missing": "neprecizat",
+              "min_doc_count": 0
+            }
+          }
+        }
+      }
+  }
+}
+```
+
+Se observă agregarea imbricată în `"stats_clase"` numită `"discipline_stats"`. Această imbricare va produce rezultate similare cu:
+
+```yaml
+{
+  "took" : 0,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 7,
+      "relation" : "eq"
+    },
+    "max_score" : null,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "stats_clase" : {
+      "doc_count_error_upper_bound" : 0,
+      "sum_other_doc_count" : 0,
+      "buckets" : [
+        {
+          "key" : "Care nu au bucket",
+          "doc_count" : 0,
+          "discipline_stats" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [ ]
+          }
+        },
+        {
+          "key" : "Clasa a IV-a",
+          "doc_count" : 3,
+          "discipline_stats" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "neprecizat",
+                "doc_count" : 3
+              }
+            ]
+          }
+        },
+        {
+          "key" : "Clasa a V-a",
+          "doc_count" : 3,
+          "discipline_stats" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "neprecizat",
+                "doc_count" : 3
+              }
+            ]
+          }
+        },
+        {
+          "key" : "Clasa a VI-a",
+          "doc_count" : 1,
+          "discipline_stats" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "neprecizat",
+                "doc_count" : 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
 
 ## Filtrări în agregări
 
