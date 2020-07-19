@@ -13,3 +13,5 @@ Dacă totuși doriți să faceți cunoscute prin distribuire aceste materiale, v
 Mare parte a codului conține nume de variabile în limba română din dorința de a fi explicate cât mai bine resursele cu care se operează fără a calchia din exemplele redactate în limba engleză.
 
 Colecția nu este una finală și poate suferi multe modificări. Materialele vor fi redactate în Markdown. Cei care doresc alte formate vor putea transforma textele cu ajutorul utilitarului pandoc în formate care să avantajeze obișnuințele proprii de lectură.
+
+Mai nou, poți să-mi dai o cafea la [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P81Y27Q)
