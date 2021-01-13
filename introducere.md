@@ -10,7 +10,7 @@ Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea tex
 
 Suita Elastic folosește un limbaj propriu utilizat la interogare numit *Query DSL* (Domain Specific Language). În esență acesta constă dintr-un obiect JSON care parametrează căutarea.
 
-Datele stau în ceea ce se numește **nod**. Aceste noduri permit o scalare orizontală. Mai multe noduri constituie un **cluster**. Clusterele sunt complet independente unele de celelalte. În Elastisearch datele sunt numite **documente**. Documentele sunt organizate în **indecși**, care au rolul de a grupa logic documentele care sunt similare.
+Datele stau în ceea ce se numește **nod**. Aceste noduri permit o scalare orizontală. Mai multe noduri constituie un **cluster**. Clusterele sunt complet independente unele de celelalte. În Elastisearch datele sunt numite **documente**. Documentele sunt organizate în **indecși**, care au rolul de a grupa logic documentele similare. Un cluster va avea cel puțin un **index inversat**. Dacă ai un index care are trei câmpuri indexate la nivel de document, vei avea trei indexuri inversate. Indexul inversat constă din toți termenii din câmpurile indexate ale tuturor documentelor unui index.
 
 Interogarea unei instanțe de Elastisearch se face printr-un REST API. Datele de interogare sunt în format JSON.
 
@@ -22,11 +22,11 @@ Este o poartă de acces către datele din Elasticsearch. Kibana permite crearea 
 
 ### Logstash
 
-Permite trimiterea de loguri ale unor aplicați în Elastisearch cu scopul de a fi analizate. Mai mult de atât, poate fi considerat o adevărată uzină de prelucrare a datelor. Tot ce primește Logstash poate fi tratat ca evenimente. În funcție de tipul evenimentului, Logstash trimite date către o componentă serviciu care are capacitatea de a le prelucra (filters, inputs și outputs).
+Permite trimiterea în Elastisearch de loguri ale unor aplicații, cu scopul de a fi analizate. Mai mult de atât, poate fi considerat o adevărată uzină de prelucrare a datelor. Tot ce primește Logstash poate fi tratat ca evenimente. În funcție de tipul evenimentului, Logstash trimite date către o componentă serviciu care are capacitatea de a le prelucra (filters, inputs și outputs).
 
 Inputurile pot fi fișiere care gestionează evenimente sau apeluri HTTP sau poate fi un câmp dintr-o bază de date care se modifică, ori un mesaj dintr-o listă a unei instanțe Kafka.
 
-Filtrele se rezumă la felul în care sunt prelucrate datele. Poți pasa unei instanțe de Logstash un fișier CSV, XML sau JSON. Odată primit un astfel de fișier cu date, pot fi analizate datele pentru a fi îmbogățite, filtrate, pentru a se face o căutare într-o bază de date, etc. Folosind un plugin, se pot trimite datele în ceea ce se numește *stashes*. Un astfel de stash poate fi o instanță de Elastisearch, o listă Kafka, un email care este trimis automat, etc.
+Filtrele se rezumă la felul în care sunt prelucrate datele. Poți pasa unei instanțe de Logstash un fișier CSV, XML sau JSON. Odată primit, un astfel de fișier cu date poate fi analizate pentru a fi îmbogățite, filtrate, pentru a se face o căutare într-o bază de date, etc. Folosind un plugin, se pot trimite datele în ceea ce se numește *stashes*. Un astfel de stash poate fi o instanță de Elastisearch, o listă Kafka, un email care este trimis automat, etc.
 
 ## X-Pack
 

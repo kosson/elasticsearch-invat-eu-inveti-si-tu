@@ -2,17 +2,16 @@
 
 ## Sharding
 
-Modul prin care se face spargerea indicilor în mai multe fragmente mici se numește sharding. Această operațiune se petrece la nivel de index. În cazul unui index cu peste un miliard de documente, această măsură este necesară. Shardingul permite scalarea pe orizontală a volumului de date. Aceste fragmente (*shards*) pot fi distribuite pe mai multe noduri. De exemplu, în cazul în care ai două noduri, fiecare cu o dimensiune mai mică decât a unui indice, acesta va putea fi spart în două shard-uri. Fiecare va sta pe câte un nod separat.
-Fiecare shard este, de fapt un indice Apache Lucene. Un shard poate stoca până la două miliarde de documente.
+Modul prin care se face spargerea indecșilor în mai multe fragmente mici se numește *sharding* (în lb. rom. *fragmentare*). Această operațiune se petrece la nivel de *index*. În cazul unui index cu peste un miliard de documente, această măsură este necesară. Shardingul permite scalarea pe orizontală a volumului de date. Aceste fragmente (*shards*) pot fi distribuite în mai multe noduri. De exemplu, în cazul în care ai două noduri, fiecare cu o dimensiune mai mică decât a unui index, acesta va putea fi spart în două shard-uri. Fiecare va sta pe câte un nod separat.
+Fiecare shard este, de fapt un index Apache Lucene. Un shard poate stoca până la două miliarde de documente.
 
 ## Replicare
 
-Replicarea este configurată la nivel de index.
-Replicarea constă în copierea shard-urilor pe care un index le conține. Aceste shard-uri replicate sunt numite *replica shards*. Shardurile sunt găzduite în noduri. Mai multe noduri constituie un cluster.
+Replicarea este configurată la nivel de index și constă în copierea shard-urilor pe care un index le conține. Aceste shard-uri replicate sunt numite *replica shards*. Shardurile sunt găzduite în noduri. Mai multe noduri constituie un cluster.
 
 ![](img/NoduriSharduriReplicare.png)
 
-Pentru a investiga starea unui cluster, ai la îndemână endpoint-ul `_cluster`. Un posibil exemplu este investigarea stării unui cluster.
+Pentru a investiga starea unui cluster, ai la îndemână endpoint-ul `_cluster`. Un posibil exemplu este investigarea stării unui cluster. Investigarea cluster-ului permite obținerea de informații relevante privind nodurile și *shard*-urile.
 
 ```yaml
 GET _cluster/health
@@ -69,19 +68,19 @@ Pentru a investiga starea shard-urilor, vom folosi același endpoint, dar pentru
 GET /_cat/shards?v
 ```
 
-Cu resultate similare cu următorul răspuns.
+Cu rezultate similare cu următorul răspuns.
 
 ```text
 shakespeare                     0     p      STARTED    111396  19.5mb 127.0.0.1 nicolaie-G750JX
 shakespeare                     0     r      UNASSIGNED
 ```
 
-Pentru a preveni pierderea de date, *replica shard*-urile nu sunt ținute pe același nod cu *primary shard*-ul. Dar pentru sistemele de producție este nevoie de cel puțin două noduri.
+Pentru a preveni pierderea de date, *replica shard*-urile nu sunt ținute pe același nod cu *primary shard*-ul. Adu-ți aminte că pentru sistemele de producție este nevoie de cel puțin două noduri.
 
 Un shard replicat este numit *primary shard*.
-Un *primary shard* și ale sale *replica shards* sunt numite *replication group*. Creșterea numărului de replica shards ajută foarte mult în scenariile de producție, în care se accesează foarte mult o singură replica shard, dacă doar una există. Acest lucru se dovedește util pentru simplu fapt că un replica shard este un index în sine care poate fi interogat. Elasticsearch face o rutare inteligentă a query-urilor către shardurile cele mai viabile pentru a răspunde repede și mai rulează paralelizat căutarea în cazul în care există mai multe shard-uri de replicare în același nod.
+Un *primary shard* și ale sale *replica shards* sunt numite *replication group*. Creșterea numărului de *replica shards* ajută foarte mult în scenariile de producție, în care se accesează foarte mult o singură replica shard, dacă doar una există. Acest lucru se dovedește util pentru simplu fapt că un replica shard este un index (Apache Lucene), care poate fi interogat. Elasticsearch face o rutare inteligentă a query-urilor către shardurile cele mai viabile pentru a răspunde repede și mai rulează paralelizat căutarea în cazul în care există mai multe shard-uri de replicare în același nod.
 
-În cazul în care avem două shard-uri pe același nod, replicile nu vor fi asignate pentru că avem un singur nod care rulează. Pentru atribuire, ar fi nevoie de un nod suplimentar pe care să le trimită. Fii avertizat de faptul că un nod suplimentar trebuie pus pe o altă mașină. Abia în momentul în care ai alt nod, abia atunci se vor repartiza și replicile.
+În cazul în care avem două shard-uri pe același nod, replicile nu vor fi create replici, pentru că avem un singur nod care rulează. Pentru scalare, ar fi nevoie de un nod suplimentar pe care să le trimită. Fii avertizat de faptul că un nod suplimentar trebuie pus pe o altă mașină. Abia în momentul în care ai alt nod, abia atunci se vor repartiza și replicile.
 
 Pe sistemele de producție este nevoie de cel puțin două noduri pentru a evita pierderile de date. La momentul creării indexurilor, poți configura câte shard-uri și câte replici dorești să ai.
 

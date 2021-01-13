@@ -32,7 +32,7 @@ GET /movies/_search
 }
 ```
 
-Una din concluziile foarte importante este aceea că scorul de relevanță este calculat în funcție de câte documente, în care a fost găsit termenul, se află pe un anumit *shard*. Importanța scade dacă sunt documente mai puține într-un shard.
+Una din concluziile foarte importante este aceea că scorul de relevanță este calculat în funcție de câte documente există termenul căutat și unde se află pe un anumit *shard*. Importanța scade dacă sunt documente mai puține într-un shard.
 
 Vom avea un răspuns la interogarea de mai sus în care fiecare rezultat va fi explicat din punct de vedere al modului în care a fost calculată relevanța.
 
