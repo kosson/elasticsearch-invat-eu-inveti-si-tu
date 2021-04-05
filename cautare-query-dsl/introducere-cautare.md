@@ -1,6 +1,6 @@
 # Căutare în Elasticsearch
 
-Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat de contextele de căutare, acestea pot fi două:
+Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat contextele de căutare, acestea pot fi două:
 
 - *query context* (se calculează relevanța)
 - *filter context* (se verifică dacă documentul există, nu se calculează relevanța).
@@ -11,7 +11,7 @@ Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o c�
 
 În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elastisearch realizează acest lucru printr-un mapping dinamic (*dynamic mapping*).
 
-## Analizers and tokenizers
+## Analizori și tokenizatori
 
 Căutarea pe texte folosind analizoarele, va returna rezultatele care se aseamănă cu ceea ce se caută. În funcție de setarea analizorului, rezultatele pot fi *case-insensitives*, *stemmed*, se pot elimina semnele de punctuație (*stop words*), se pot folosi sinonimele, etc. Faptul că se face o căutare cu mai multe cuvinte, nu înseamnă că trebuie să fie găsite toate într-un document pentru ca acesta să fie adus. Se vor folosi *text types* pentru respectivele câmpuri. Poți configura diferite analizoare pentru fiecare câmp în parte.
 
@@ -19,7 +19,7 @@ Căutarea pe texte folosind analizoarele, va returna rezultatele care se aseamă
 
 ### Analizoare
 
-#### Înterogare folosind `match`.
+#### Interogare folosind `match`.
 
 Acest tip de analizor se va folosi în cazul în care dorești să aduci toate documentele care se potrivesc cu stringul pe care-l pasezi pentru un anumit câmp.
 
@@ -217,7 +217,7 @@ De regulă, vei folosi acest filtru pentru a căuta date calendaristice, numere,
 
 Adu-ți mereu aminte că În Elasticsearch fiecare câmp care are o valoare `text` este automat tratat deopotrivă ca un câmp de `text`, dar și ca un câmp `keyword` dacă este permisă maparea dinamică.
 
-Filtrul este folosite pentru a face filtrări după o listă de termeni menționați într-un `Array`. Documentul va fi pus în setul celor găsite dacă conține în câmpul specificat una din valorile din array.
+Filtrul este folosit pentru a face filtrări după o listă de termeni menționați într-un `Array`. Documentul va fi pus în setul celor găsite dacă conține în câmpul specificat una din valorile din array.
 
 ```yaml
 GET /movies/_search
@@ -288,7 +288,7 @@ Acest filtru este cel care permite combinarea filtrelor folosindu-se logica bool
 
 #### `match`
 
-Căutările `match` sunt foarte potrivite pentru căutarea unor fragment (chei de căutare) care vine de la un input text. Fragmentul după care se face căutarea va fi trecut prin același analizor care a fost specificat pentru respectivul câmp. Pentru a vedea care este acela, trebuie verificat mapping-ul. Adu-ți aminte că la căutările la nivel de termen, aceștia nu sunt analizați.
+Căutările `match` sunt foarte potrivite pentru căutarea unui fragment (cheie de căutare), care vine de la un input text. Fragmentul după care se face căutarea va fi trecut prin același analizor care a fost specificat pentru respectivul câmp. Pentru a vedea care este acela, trebuie verificat mapping-ul. Adu-ți aminte că la căutările la nivel de termen, aceștia nu sunt analizați.
 
 Caută în rezultate care sunt generate de analizori, așa cum ar fi cazul unei căutări în text (*full text search*).
 
@@ -296,8 +296,7 @@ Caută în rezultate care sunt generate de analizori, așa cum ar fi cazul unei 
 {"match": {"title": "star"}}
 ```
 
-La o căutare simplă, operatorul din oficiu pentru termenii din cheia de căutare este OR. Acest lucru înseamnă că vor fi găsite toate documentele în care pot exista combina
-ii ale termenilor din sintagma de căutare. Dacă fie și numai unu este, se constituie set cu toate documentele care îl au. Poți modifica comportamentul de căutare modificând acest operator la AND. Acest lucru înseamnă că toți termenii din cheia de căutare, trebuie să existe în câmpul pentru care se face căutarea.
+La o căutare simplă, operatorul din oficiu pentru termenii din cheia de căutare este OR. Acest lucru înseamnă că vor fi găsite toate documentele în care pot exista combinații ale termenilor din sintagma de căutare. Dacă fie și numai unu este, se constituie set cu toate documentele care îl au. Poți modifica comportamentul de căutare modificând acest operator la AND. Acest lucru înseamnă că toți termenii din cheia de căutare, trebuie să existe în câmpul pentru care se face căutarea.
 
 ```yaml
 GET /recipe/_search

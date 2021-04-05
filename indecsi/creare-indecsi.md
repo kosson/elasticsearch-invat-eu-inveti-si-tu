@@ -1,8 +1,8 @@
 # Crearea de indecși
 
-Cel mai simplu mod de a crea un index este să îl creezi cu un `PUT /nume_index`. În acest moment s-a creat un primary shard și un replica shard. Sintaxa prezentată se referă la Dev Tools-ul din Kibana. Poți folosi foarte bine și `curl`.
+Cel mai simplu mod de a crea un index este să îl creezi cu un `PUT /nume_index`. În acest moment s-a creat un primary shard și un replica shard. Sintaxa prezentată se aplică în Dev Tools-ul din Kibana. Poți folosi foarte bine și `curl`.
 
-Acest index va avea starea *yellow* pentru simplu motiv că nu a avut un node căruia să-i trimită replica shard-ul. Din acest motiv, starea este yellow. Atunci când este creat un alt nod, se va aloca replica shard-urile și starea va fi green.
+Acest index va avea starea *yellow* pentru simplu motiv că nu a avut un *node* căruia să-i trimită replica shard-ul. Din acest motiv, starea este *yellow*. Atunci când este creat un alt nod, se va aloca replica shard-urile și starea va fi *green*.
 
 Pentru a verifica numărul și starea indecșilor creați, se va folosi comanda `GET /_cat/indices?v`, care va indica informații foarte utile privind alocarea shard-urilor primare, replicile, starea indexului și chiar numărul de documente dintr-un index.
 

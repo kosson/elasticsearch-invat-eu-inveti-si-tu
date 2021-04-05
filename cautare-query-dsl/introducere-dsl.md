@@ -1,8 +1,6 @@
 # Query DSL (Domain Specific Language)
 
-Limbajul de interogare folosit de Elasticsearch se bazează pe JSON. Endopointul folosit pentru a se putea performa înterogări, se numește `_search`.
-
-Pentru a elabora interogarea, se va pasa endpoint-ului un obiect cu o cheie `query`.
+Limbajul de interogare folosit de Elasticsearch se bazează pe JSON. Endpointul folosit pentru înterogări, se numește `_search`. Pentru a elabora interogarea, se va pasa endpoint-ului un obiect cu o cheie `query`.
 
 De la bun început, Elasticsearch face sortarea rezultatelor căutărilor în baza unui **relevance score**.
 Scorul de relevanță este un număr cu virgulă mobilă, care este prezent în meta-field-ul `_score`. Cu cât este mai mare valoarea lui `_score`, cu atât este documentul mai relevant.

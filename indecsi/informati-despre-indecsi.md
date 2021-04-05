@@ -13,6 +13,13 @@ O astfel de interogare, va afișa și indecșii specifici monitorizării Elastis
 
 Pentru a obține o listă a indecșilor creați de aplicațiile proprii, vom folosi o expresie precum `GET _cat/indices/*,-.*?v`, care va folosi operatori precum minus și wildcard-ul. Astfel, se va realiza o adevărată filtrare a celor care sunt specifici ELK.
 
+## Endpointul `_cat/count/nume_indice`
+
+Dacă dorești să afli numărul documentelor indexate, vei folosi endpint-ul `_cat/count/nume_indice`, iar pentru o versiune afișată cu headere la tabel adaugi `?v&pretty`.
+
+O variantă de a obține numărul documentelor este și prin folosirea endpoint-ului `_search`:
+`GET /resedus/_search?size=0&filter_path=hits.total&pretty`
+
 ## Resurse
 
 - [Multiple indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-index.html#multi-index)
