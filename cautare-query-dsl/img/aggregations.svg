@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)"
+   sodipodi:docname="aggregations.svg"
+   inkscape:export-filename="/home/nicolaie/Desktop/DEVELOPMENT/ELASTICSEARCH/elasticsearch-invat-eu-inveti-si-tu/cautare-query-dsl/img/aggregations.png"
+   inkscape:export-xdpi="200"
+   inkscape:export-ydpi="200"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.5037598"
+     inkscape:cx="376.72239"
+     inkscape:cy="341.4774"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#f76183;stroke-width:0.470429;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect3480-2-3"
+       width="30.907997"
+       height="8.8221779"
+       x="125.19762"
+       y="51.762314"
+       ry="0.81890428" />
+    <rect
+       style="fill:#ff94b1;stroke-width:0.470429;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect3480"
+       width="30.907997"
+       height="8.8221779"
+       x="85.392288"
+       y="32.365379"
+       ry="0.81890428" />
+    <rect
+       style="fill:#f76183;stroke-width:0.470429;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect3480-2"
+       width="30.907997"
+       height="8.8221779"
+       x="43.018398"
+       y="51.762314"
+       ry="0.81890428" />
+    <rect
+       style="fill:#f76183;stroke-width:0.470429;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect3480-2-9"
+       width="30.907997"
+       height="8.8221779"
+       x="85.322739"
+       y="51.762314"
+       ry="0.81890428" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="88.163277"
+       y="37.918697"
+       id="text1904"><tspan
+         sodipodi:role="line"
+         id="tspan1902"
+         style="font-size:4.23333px;stroke-width:0.264583"
+         x="88.163277"
+         y="37.918697">aggregations</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="52.139355"
+       y="57.568283"
+       id="text1904-6"><tspan
+         sodipodi:role="line"
+         id="tspan1902-3"
+         style="font-size:4.23333px;fill:#ffccd6;stroke-width:0.264583"
+         x="52.139355"
+         y="57.568283">metric</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="94.382309"
+       y="57.61697"
+       id="text1904-9"><tspan
+         sodipodi:role="line"
+         id="tspan1902-4"
+         style="font-size:4.23333px;fill:#ffccd6;stroke-width:0.264583"
+         x="94.382309"
+         y="57.61697">bucket</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="132.12994"
+       y="57.280418"
+       id="text1904-8"><tspan
+         sodipodi:role="line"
+         id="tspan1902-1"
+         style="font-size:4.23333px;fill:#ffccd6;stroke-width:0.264583"
+         x="132.12994"
+         y="57.280418">pipeline</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 91.20997,41.187557 68.108713,51.762314"
+       id="path5840"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3480"
+       inkscape:connection-end="#rect3480-2" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 100.83047,41.187557 -0.0379,10.574757"
+       id="path5842"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3480"
+       inkscape:connection-end="#rect3480-2-9" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 109.89848,41.187557 21.70094,10.574757"
+       id="path5844"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect3480"
+       inkscape:connection-end="#rect3480-2-3" />
+  </g>
+</svg>

@@ -23,8 +23,6 @@ Tokenizerul este responsabil și cu ținerea minte a ordinii, adică a poziției
 
 Un analizor are un singur tokenizator.
 
-## Filtre la nivel de token
-
 Un analizor poate avea unul sau mai multe filtre la nivel de token. Acestea primesc stream-ul de tokeni și adaugă, modifică sau elimină dintre ei. De exemplu, un filtru [lowercase](https://www.elastic.co/guide/en/elasticsearch/reference/7.5/analysis-lowercase-tokenfilter.html) va transforma cuvintele în lowercase, un filtru [stop](https://www.elastic.co/guide/en/elasticsearch/reference/7.5/analysis-stop-tokenfilter.html) va elimina cuvintele considerate *stop words*, iar un filtru [synonym](https://www.elastic.co/guide/en/elasticsearch/reference/7.5/analysis-synonym-tokenfilter.html) va permite introducerea de sinonime.
 
 ## Resurse

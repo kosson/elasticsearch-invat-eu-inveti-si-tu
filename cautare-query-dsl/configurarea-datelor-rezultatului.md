@@ -249,15 +249,6 @@ Numărul de rezultate dintr-un set returnat este setat din oficiu la 10.
  }
  ```
 
-## Paginare
-
-Pentru a realiza un serviciu coerent de paginare mai întâi de toate avem nevoie să calculăm care este numărul total de pagini care sunt disponibile. Limitarea Elasticsearch-ului este de 10.000 de rezultate gestionate astfel. Reține faptul că fiecare cerere este una stateless. Atunci când lucrăm cu Elasticsearch nu avem la dispoziție vreun cursor așa cum este cazul bazelor de date relaționale. Încă o precizare este că toate calculele se fac pe baza unor numere stabilite conform unui set la un moment dat. Dacă documente au fost adăugate sau șterse între timp, acest lucru se va reflecta în rezultatele de paginare. În bazele de date relaționale setul pentru care s-a stabilit un cursor rămâne stabil până în momentul în care nu mai este folosit. Nu este cazul Elasticsearch.
-
-Pentru a oferi Elasticsearch numerele neceare, la nivel de aplicație trebuie făcute niște calcule:
-
-- Formula de calcul este **toate_paginile = ceil(total_hits/dimensiunea_paginii)**.
-- Parametrul `from`, adică offset-ul se calculează după următoarea formulă: **from = (dimensiunea_paginii * (numărul_paginii_prezente - 1))**.
-
 ## Sortarea simplă a rezultatelor
 
 Mai întâi alegi câmpul după care dorești să faci sortarea.

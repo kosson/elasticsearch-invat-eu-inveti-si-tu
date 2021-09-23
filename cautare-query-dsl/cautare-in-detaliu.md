@@ -1,6 +1,6 @@
 # Căutare în Elasticsearch
 
-Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest lucru foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat contextele de căutare, acestea pot fi două:
+Regula principală atunci când se face o căutare este aceea că operațiunea implică indexul inversat, nu documentele. Acest detaliu foarte important explică diferențele pe care le obținem în diferitele **contexte de căutare**. Pentru că am menționat contextele de căutare, acestea pot fi două:
 
 - *query context* (se calculează relevanța)
 - *filter context* (se verifică dacă documentul există, nu se calculează relevanța).
@@ -9,11 +9,19 @@ Un alt aspect important al căutărilor pe care le poți face pe documentele din
 
 Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o căutare *match query* mai întâi va face o analiză a textului și abia după aceea va căuta în indexul inversat. Căutarea va aduce rezultate în al doilea caz pentru că anterior și textul documentelor a trecut prin același proces de analiză (analizorul folosit pentru câmp este același și pentru textul de căutare).
 
-În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elastisearch realizează acest lucru printr-un mapping dinamic (*dynamic mapping*).
+În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elastisearch oferă automat acest model în cazul în care nu s-a definit un mapping, ci s-a lăsat la lucru mapping-ul dinamic (*dynamic mapping*).
 
 ## Analizori și tokenizatori
 
-Căutarea pe texte folosind analizoarele, va returna rezultatele care se aseamănă cu ceea ce se caută. În funcție de setarea analizorului, rezultatele pot fi *case-insensitives*, *stemmed*, se pot elimina semnele de punctuație (*stop words*), se pot folosi sinonimele, etc. Faptul că se face o căutare cu mai multe cuvinte, nu înseamnă că trebuie să fie găsite toate într-un document pentru ca acesta să fie adus. Se vor folosi *text types* pentru respectivele câmpuri. Poți configura diferite analizoare pentru fiecare câmp în parte.
+Căutarea pe texte folosind analizoarele va returna rezultatele care se aseamănă cu ceea ce se caută. În funcție de setarea analizorului, rezultatele pot fi *case-insensitives*, *stemmed*, se pot elimina semnele de punctuație (*stop words*), se pot folosi sinonimele, etc. Faptul că se face o căutare cu mai multe cuvinte, nu înseamnă că trebuie să fie găsite toate într-un document pentru ca acesta să fie adus. Se vor folosi *text types* pentru respectivele câmpuri. Poți configura diferite analizoare pentru fiecare câmp în parte.
+
+Un analizor este un pachet compus din următoarele blocuri constructive de nivel elementar:
+
+- filtre la nivel de caractere
+- tokenizatoare și
+- filtre pe tokenuri.
+
+Un analizor are un singur tokenizator. Analizorii din oficiu includ deja aceste blocuri constructive pentru a răspunde adecvat diferitelor limbi și tipuri de text.
 
 În unele cazuri, căutarea trebuie să fie precisă. Doar o anumită combinație de cuvinte trebuie să fie găsită pentru a returna un document și exact combinația de majuscule. Se va folosi un *keyword type* atunci când definești un index. Folosirea acestuia va dezactiva analizoarele pentru acel câmp.
 
@@ -21,7 +29,7 @@ Căutarea pe texte folosind analizoarele, va returna rezultatele care se aseamă
 
 #### Interogare folosind `match`.
 
-Acest tip de analizor se va folosi în cazul în care dorești să aduci toate documentele care se potrivesc cu stringul pe care-l pasezi pentru un anumit câmp.
+Acest tip de analizor este folosit în cazul în care dorești să aduci toate documentele care se potrivesc cu stringul pe care-l pasezi pentru un anumit câmp.
 
 ```bash
 curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_search?pretty -d '
@@ -34,7 +42,7 @@ curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_search?pre
 }'
 ```
 
-Răspunsul include rezultate ce conțin cuvântul `Star`. Ceea ce este important de remarcat este scorul. Pentru Star Trek, acesta este  `2.5194323`, iar pentru Star Wars este `0.66992384`. Deci primele rezultate în cazul folosirii analizoarelor sunt cele mai importante, chiar dacă setul de date returnat conține și documentele în care sunt doar câteva dintre cuvintele căutate.
+Răspunsul include rezultate ce conțin cuvântul `Star` în câmpul `title`. Ceea ce este important de remarcat este scorul. Pentru Star Trek, acesta este  `2.5194323`, iar pentru Star Wars este `0.66992384`. Deci, primele rezultate în cazul folosirii analizoarelor sunt cele mai importante, chiar dacă setul de date returnat conține și documentele în care sunt doar câteva dintre cuvintele căutate.
 
 ```json
 {
@@ -94,7 +102,7 @@ Răspunsul include rezultate ce conțin cuvântul `Star`. Ceea ce este important
 
 #### Interogare folosind `match_phrase`
 
-Este un analizor care oferă toate rezultatele care conțin fragmentul de text pasat pentru un anumit câmp pe care documentele îl au. Rezultatele vor fi alese în ordinea cuvintelor pasate. Acest lucru este posibil pentru că în indexul inversat, nu numai că se face o potrivire a termenilor dintr-un text, dar este memorată și poziția acestor termeni în text.
+Analizorul oferă toate documentele care conțin fragmentul de text pasat pentru un anumit câmp. Rezultatele vor fi alese în ordinea cuvintelor pasate. Acest lucru este posibil pentru că în indexul inversat, nu numai că se face o potrivire a termenilor dintr-un text, dar este memorată și poziția acestor termeni în text.
 
 ```bash
 curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_search?pretty -d '
@@ -114,7 +122,11 @@ curl -H 'Content-Type: application/json' -XGET 127.0.0.1:9200/movies/_search?pre
 {
   "query": {
     "match_phrase": {
-      "title": {"query": {"star beyond", "slop": 1}
+      "title": {
+        "query": {
+          "star beyond", "slop": 1
+        }
+      }
      }
     }
   }
@@ -136,7 +148,7 @@ http://127.0.0.1:9200/movies/_search?q=+year:>2010+title:trek
 
 Aceste interogări se pot face în browser și este returnat un obiect JSON. Problema este legată de necesitatea de a coda URL-ul pentru a trimite datele de interogare pe net.
 
-Nu se va folosi această posibilitate în mediile de producție. Din punct de vedere al securități este un punct foarte sensibil prin care s-ar putea iniția activități ce pot suprasolicita serverul.
+Nu se va folosi această posibilitate în mediile de producție. Din punct de vedere al securității este un punct foarte sensibil prin care s-ar putea iniția activități ce pot suprasolicita serverul.
 
 ## Căutare cu filtre
 
@@ -276,7 +288,11 @@ Caută documentele din care lipsește câmpul specificat în query.
 {"missing": {"field": "tags"}}
 ```
 
-### Tipuri de query-uri
+## Tipuri de query-uri
+
+### Căutări Boolean
+
+![](img/CompoundQueries.png)
 
 #### `bool`
 
@@ -286,19 +302,38 @@ Acest filtru este cel care permite combinarea filtrelor folosindu-se logica bool
 - `must_not`,
 - `should`.
 
-#### `match`
+### Căutări pe texte
 
-Căutările `match` sunt foarte potrivite pentru căutarea unui fragment (cheie de căutare), care vine de la un input text. Fragmentul după care se face căutarea va fi trecut prin același analizor care a fost specificat pentru respectivul câmp. Pentru a vedea care este acela, trebuie verificat mapping-ul. Adu-ți aminte că la căutările la nivel de termen, aceștia nu sunt analizați.
+![](img/fullTextSearching.png)
 
-Caută în rezultate care sunt generate de analizori, așa cum ar fi cazul unei căutări în text (*full text search*).
+#### `match` query
+
+Acest tip de interogare selectează documentele care se potrivesc cu o cheie de căutare care poate fi text, număr, dată sau o valoare boolean. Textul care este primit este analizat înainte de a se face operațiunea de căutare. Această interogare este folosită pentru căutarea full-text, fiind inclusă și opțiunea pentru regăsire în baza logicii fuzzy. Un exemplu oferit de sursa documentației este următorul.
+
+```bash
+GET /_search
+{
+  "query": {
+    "match": {
+      "message": {
+        "query": "this is a test"
+      }
+    }
+  }
+}
+```
+
+Căutările `match` sunt foarte potrivite pentru căutarea unui fragment (cheie de căutare), care vine de la un input text. Fragmentul după care se face căutarea va fi trecut prin același analizor care a fost specificat pentru respectivul câmp. Pentru a vedea care este acela, trebuie verificat mapping-ul. Adu-ți aminte că la căutările la nivel de termen, aceștia nu sunt [analizați](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis.html).
+
+Cautarea se face în rezultate care sunt generate de analizori, așa cum ar fi cazul unei căutări în text (*full text search*).
 
 ```json
 {"match": {"title": "star"}}
 ```
 
-La o căutare simplă, operatorul din oficiu pentru termenii din cheia de căutare este OR. Acest lucru înseamnă că vor fi găsite toate documentele în care pot exista combinații ale termenilor din sintagma de căutare. Dacă fie și numai unu este, se constituie set cu toate documentele care îl au. Poți modifica comportamentul de căutare modificând acest operator la AND. Acest lucru înseamnă că toți termenii din cheia de căutare, trebuie să existe în câmpul pentru care se face căutarea.
+Operatorul din oficiu pentru termenii din cheia de căutare este OR. Vor fi aduse toate documentele în care pot exista combinații ale termenilor din sintagma de căutare. Chiar dacă este numai unu, se constituie set cu toate documentele care îl conțin. Poți modifica comportamentul de căutare, modificând acest operator la AND. Acest lucru înseamnă că toți termenii din cheia de căutare, trebuie să existe în câmpul pentru care se face căutarea.
 
-```yaml
+```bash
 GET /recipe/_search
 {
   "query":{
@@ -312,12 +347,85 @@ GET /recipe/_search
 }
 ```
 
-#### `match_phrase`
+O variantă simplificată ar fi combinația dintre query și câmp.
+
+```bash
+GET /_search
+{
+  "query": {
+    "match": {
+      "message": "this is a test"
+    }
+  }
+}
+```
+
+După cum se observă în exemplu, câmpul după care faci căutarea se poate parametra mai departe. Să investigăm cum se parametrează câmpul.
+
+**Parametrul `query`**
+Acesta este obligatoriu. O căutare *match* va analiza textul înainte de a face o căutare. Acest lucru înseamnă că o căutare *match* va face o căutare în câmpuri text după tokenii rezultați din analiză, nu neapărat după termenii exacți.
+
+**Parametrul `analyzer`**
+Este un string cate poate fi introdus opțional, precizând [ce analizor](https://www.elastic.co/guide/en/elasticsearch/reference/current/specify-analyzer.html) va fi utilizat pentru a converti textul introdus drept valoare lui `query` în tokeni. În cazul în care nu este precizat un analizor în mod explicit, va fi folosit cel care este introdus în mapping pentru acel câmp - [index-time-analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/specify-analyzer.html#specify-index-time-analyzer). Un exemplu oferit de textul documentației ar fi.
+
+```bash
+PUT my-index-000001
+{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "whitespace"
+      }
+    }
+  }
+}
+```
+
+În cazul în care nu există nici în mapping vreo precizare privind analizorul, este folosit analizorul din oficiu pe care indexul îl folosește. La următorul link poți vedea cum este determinat analizorul din oficiu: https://www.elastic.co/guide/en/elasticsearch/reference/current/specify-analyzer.html#specify-search-analyzer.
+
+**Parametrul `auto_generate_synonyms_phrase_query`**
+Este un boolean care dacă este `true` vor fi create query-uri *match phrase* automat pentru generarea de sinonime multi-termen. Valoarea din oficiu este `true`. Această opțiune implică un filtru pentru token-uri numit `synonym_graph`. De exemplu, pentru sinonimele `ny, new york` se va produce o potrivire `(ny OR ("new york"))`.
+
+**Parametrul `fuzziness`**
+Este un parametru opțional care atunci când este folosit poți aduce documente care se potrivesc **vag** fragmentului căutat atunci când se face o căutare pe câmpuri a căror valoare este text sau keyword. Acest criteriu de căutare se bazează pe algoritmul *Levenshtein distance* (https://en.wikipedia.org/wiki/Levenshtein_distance) și în linii mari precizează care este numărul de caractere care sunt diferite de ceea ce ar trebui să fie pentru a face regăsirea. Adică, care ar fi distanța/diferența dintre două cuvinte să fie același lucru - [fuzziness](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#fuzziness).
+
+**Parametrul `max_expansions`**
+Este un număr întreg care reprezintă numărul maxim de termeni care vor fi luați în considerare. Numărul din oficiu este `50`.
+
+**Parametrul `prefix_length`**
+Este un număr întreg care reprezintă de caratere de la început care vor fi neatinse de procedura fuzzy. Valoarea din oficiu este `0`.
+
+**Parametrul `fuzzy_transpositions`**
+Este un boolean opțional, care setat la `true` editările care se vor face pentru căutările fuzzy include transpoziția a două caractere alăturare: (ab → ba). Valoarea din oficiu este `true`.
+
+**Parametrul `fuzzy_rewrite`**
+Acesta este un șir de caractere opțional. Acesta indică metoda folosită pentru a rescrie query-ul. Dacă parametrul `fuzziness` nu este `0`, query-ul `match` folosește din oficiu o metodă `fuzzy_rewrite` numită `top_terms_blended_freqs_${max_expansions}`.
+
+**Parametrul `lenient`**
+Acesta este o valoare boolean, care în cazul în care este `true`, erorile de formatare cum ar fi introducerea unei valori text pentru un câmp numeric. vor fi ignorate. Valoarea din oficiu este `false`.
+
+**Operatorul `operator`**
+Este o valoare boolean care este folosită pentru a interpreta textul din query. Valorile pentru care se folosește sunt:
+ - `OR` (din oficiu). De exemplu, pentru o valoare a query-ului `city of Bucharest`, vei avea o interpretare `city OR Bucharest`;
+ - `AND` va remodela interpretarea precum în `city AND Bucharest`.
+
+ **Operatorul `minimum_should_match`**
+Este un String opțional care reprezintă numărul maxim de condiții pe care un document trebuie să le întrunească pentru ca un document să fie luat în calcul.
+
+**Operatorul `zero_terms_query`**
+Este un string opțional care indică dacă documentele nu vor fi returnate în cazul în care `analyzer` elimină toți tokenii, precum în cazul folosirii filtrului `stop`. Valorile valide sunt:
+- `none` (valoarea din oficiu) - nu sunt returnate documente dacă sunt eliminați de `analyzer`;
+- `all` - returnează toate documentele similar query-ului `match_all`.
+
+Sursa: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html
+
+#### match_phrase
 
 În această căutare ordinea termenilor din sintagma de căutare are importanță. Cuvintele trebuie să apară chiar în ordinea specificată în cheia de căutare în câmpul documentelor pentru a se putea contabiliza în rezultatul de căutare.
 
-```yaml
-GET /recipe/_search
+```bash
+GET /reteta/_search
 {
   "query":{
     "match_phrase":{
@@ -327,25 +435,57 @@ GET /recipe/_search
 }
 ```
 
+Acest tip de căutare, căutarea unei fraze este posibilă pentru că în indexul inversat este ținută minte și poziția termenilor.
+
 În cazul în care un câmp conține ambii termeni, scorul de relevanță crește comparativ cu documentele care au în câmpurile specificate doar câte unul din ei.
 
-#### `match_all`
+Poți introduce și o anumită posibilă distanță între termenii din frază introducând opțiunea `slop`.
+
+```json
+{
+  "query": {
+    "match_phrase": {
+      "title": {
+        "query": "spaghetti umplute cu carne",
+        "slop": 1
+      }
+    }
+  }
+}
+```
+
+În exemplul de mai sus, la o căutare , va aduce documentele care au un termen între `spaghetti` și `carne`. Acest lucru este realizat prin utilizarea opțiunii `slop`, care face potriviri în stânga și în dreapta primului termen în cazul nostru pentru a găsi posibile documente. Slop permite așa-numitele căutări în proximitate.
+
+Daă pui un slop mare, va regăsi toate documentele care au respectivii termeni, dar scorul cel mai mare îl vor avea documentele care vor avea termenii cel mai apropiați unul de celălalt.
+
+#### match_all
 
 ```json
 {"match_all": {}}
 ```
 
-#### `multi_match`
+#### multi_match
 
 Fă aceeași căutare pe mai multe câmpuri.
 
 ```json
-{"multi_match": {"query": "star", "fields": ["title", "synopsis"]}}
+{
+  "multi_match": {
+    "query": "star",
+    "fields": ["title", "synopsis"]
+  }
+}
 ```
+
+Sursa: https://www.elastic.co/guide/en/elasticsearch/reference/7.x/query-dsl-multi-match-query.html
+
+### Geo queries
+
+![](img/GeoQueries.png)
 
 ## Căutarea după id
 
-```yaml
+```bash
 GET /movies/_search
 {
   "query": {
@@ -358,6 +498,13 @@ GET /movies/_search
 
 ## Paginarea rezultatelor
 
+Pentru a realiza un serviciu coerent de paginare mai întâi de toate avem nevoie să calculăm care este numărul total de pagini care sunt disponibile. Limitarea Elasticsearch-ului este de 10.000 de rezultate gestionate astfel. Reține faptul că fiecare cerere este una stateless. Atunci când lucrăm cu Elasticsearch nu avem la dispoziție vreun cursor așa cum este cazul bazelor de date relaționale. Încă o precizare este că toate calculele se fac pe baza unor numere stabilite conform unui set la un moment dat. Dacă au fost adăugate sau șterse documente între timp, acest lucru se va reflecta în rezultatele de paginare. În bazele de date relaționale setul pentru care s-a stabilit un cursor rămâne stabil până în momentul în care nu mai este folosit. Nu este cazul Elasticsearch.
+
+Pentru a oferi Elasticsearch numerele neceare, la nivel de aplicație trebuie făcute niște calcule:
+
+- Formula de calcul este **toate_paginile = ceil(total_hits/dimensiunea_paginii)**.
+- Parametrul `from`, adică offset-ul se calculează după următoarea formulă: **from = (dimensiunea_paginii * (numărul_paginii_prezente - 1))**.
+-
 Pentru a obține rezultate care să poată fi paginate, ceea ce trebuie făcut este să fie specificat în query `from` și `size`. Numărătoarea începe de la `0`.
 
 ```bash
@@ -375,6 +522,8 @@ curl -H "Content-Type: application/json" -XGET '127.0.0.1:9200/movies/_search?pr
 
 Buna practică spune ca paginarea să se facă pe seturi mici de date. Altfel, Elasticsearch va trebui să le aduca pe toate, să le sorteze și să ofere segmentul dorit în intervalul specificat. Deci, seturi mici.
 
+Paginarea în mare adâncime, poate avea un impact asupra performanței. Fiecare rezultat trebuie adus de la server. Pentru a evita aceste probleme, setează o limită de rezultate maxime care poate fi adusă utilizatorului.
+
 ## Sortarea rezultatelor
 
 Pentru a sorta rezultatele atunci când documentele sunt căutate după un anumit câmp, vei avea nevoie de unul care să permită acest lucru. Câmpurile care permit sortarea sunt cele care nu sunt analizate.
@@ -386,7 +535,7 @@ curl -H "Content:Type: application/json" -XPUT '127.0.0.1:9200/movies/' -d '
 {
   "mappings": {
     "properties": {
-      "title": {
+      "titlu": {
         "type": "text",
         "fields": {
           "raw": {
@@ -399,7 +548,9 @@ curl -H "Content:Type: application/json" -XPUT '127.0.0.1:9200/movies/' -d '
 }'
 ```
 
-## Potriviri aproximative
+Apoi, când vei face sortarea va fi `{sort: "titlu.raw"}`.
+
+## Potriviri aproximative - fuzzy
 
 Este metoda prin care sunt găsite documente chiar dacă au fost întâmpinate erori de redactare. Mecanismul se numește *distanță de editare levenshtein* prin care se fac substituiri de caractere, inserarea unora sau chiar ștergerea acestora.
 
@@ -495,7 +646,7 @@ GET /movies/_search
 }
 ```
 
-## index-time cu n-grams
+## Caută în timp ce scrii cu n-grams
 
 Să pornim cu un termen pentru care să introducem câteva n-gram-uri. Pentru `start`, am putea avea următoarele n-gram-uri:
 
@@ -504,7 +655,7 @@ Să pornim cu un termen pentru care să introducem câteva n-gram-uri. Pentru `s
 - *trigram*: [sta, tar]
 - *4-gram*:  [star]
 
-Mai există așa-numitele `edge n-grams`, care sunt construite doar pentru caracterele cu care începe un cuvânt. De exemplu, pentru a construi n-gram-ul pentru termenul `star`, voi avea următoarele posibile:
+Mai există așa-numitele `edge n-grams`, care sunt construite doar pentru caracterele cu care începe un cuvânt. De exemplu, pentru a construi n-gram-ul pentru termenul `star`, voi avea următoarele posibile combinații:
 
 - *unigram*: [s]
 - *bigram*:  [st]
@@ -560,9 +711,34 @@ curl -H "Content-Type: application/json" -XGET '127.0.0.1:9200/movies/_search?pr
     "match": {
       "title": {
         "query":"sta",
-        "analyzer";"standard"
+        "analyzer": "standard"
       }
     }
   }
 }'
 ```
+
+Fii foarte atent ca la interogare să folosești analizorul standard pentru că de vei utiliza pe `autocomplete` vor fi aduse toate rezultatele care se potrivesc n-gram-urile începând cu o simgură literă, prima din cuvântul pasat pentru căutare, apoi prima literă cu a doua ș.a.m.d. Pentru a evita această situație, în căutare se va preciza analizorul standard. Pentru a rafina cu adevărat rezultatele aduse pe măsură ce utilizatorul tastează termenul de căutare, se recomandă folosirea mecanismului de *completion suggestion*.
+
+Înainte de a folosi, poți testa un analizor pentru a vedea ce rezultate obții folosind un index existent.
+
+```bash
+GET movies/_analyze
+{
+  "analyze": "autocomplete",
+  "text": "Sta"
+}
+```
+
+Elasticsearch permite încărcarea dinainte a posibilelor variante de auto-complete folosind ceea ce se numește *completion suggestion*.
+
+## Căutarea din perspectiva taxării resurselor
+
+Anumite interogări vor fi executate generând un timp mai îndelungat datorită modului în care sunt implementate.
+
+![](img/queriuriSolicitante.png)
+
+## Resurse
+
+- [Script query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-script-query.html)
+- [Fuzzy query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html)

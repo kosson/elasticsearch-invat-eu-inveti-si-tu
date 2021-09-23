@@ -68,7 +68,7 @@ Pentru a investiga starea shard-urilor, vom folosi același endpoint, dar pentru
 GET /_cat/shards?v
 ```
 
-Cu rezultate similare cu următorul răspuns.
+Cu rezultate similare în următorul răspuns.
 
 ```text
 shakespeare                     0     p      STARTED    111396  19.5mb 127.0.0.1 nicolaie-G750JX

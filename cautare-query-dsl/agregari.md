@@ -2,15 +2,17 @@
 
 ## Introducere
 
-Sunt un mod de a extrage sau grupa date statistice. Ceea ce se poate face folosind agregările, depășește cu mult sfera unor simple statistici. Poți calcula diverse metrici (average, statiscici, min/max, procente), poți introduce datele în așa-numite *buckets* utile pentru constituirea unor histograme, afișarea unor intervale, distanțe, termeni cu anumite semnificații care apar în documente. Se pot realiza chiar *pipelines* care permit manipularea mediilor (*moving averages*) sau poți calcula sume cumulative. Mai nou, Elasticsearch permite calcule la nivel matriceal.
+Sunt un mod de a extrage sau grupa date statistice. Ceea ce se poate face folosind agregările, depășește cu mult sfera unor simple statistici. Poți calcula diverse metrici (average, statistici, min/max, procente), poți introduce datele în așa-numite *buckets* utile pentru constituirea unor histograme, afișarea unor intervale, distanțe, termeni cu anumite semnificații care apar în documente. Se pot realiza chiar *pipelines* care permit manipularea mediilor (*moving averages*) sau poți calcula sume cumulative. Mai nou, Elasticsearch permite calcule la nivel matriceal.
+
+![](img/aggregations.png)
 
 Atunci când este necesar, poți să faci imbricare a agregărilor.
 
 Atunci când construiești o agregare, proprietatea care marchează query-ul este `aggs`. Aceasta la rândul ei structurează agregarea printr-un obiect al cărui fiecare proprietate este un nume pe care-l alegi să denumească un bucket, de exemplu, un identificator pe care să-l poți referi mai departe.
 
-De exemplu, să facem o agregare simplă numită `aprecieri`. Agregarea o vom face la nivel de `terms`.
+De exemplu, să facem o agregare simplă numită `aprecieri`. Agregarea o vom face la nivel de `terms` ca parte a unei căutări. Această căutare se numește [terms aggregation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html).
 
-```yaml
+```bash
 GET /rating/_search
 {
   'size': 0,
@@ -24,9 +26,11 @@ GET /rating/_search
 }
 ```
 
-Ca efect, vom obține toate documentele care au valori în câmpul `rating`. Pentru a restrânge setul luat în calcul pentru analiză, vom mai adăuga un `query` la `aggs`, precum mai jos pentru a restrânge agregarea doar la documentele care au un `rating` de cel puțin valoarea `5.0`.
+Opțiunea `size` menționează faptul că nu dorim rezultatele căutării, ci numai pe cele ale agregării.
 
-```yaml
+Ca efect, vom obține toate documentele care au valori în câmpul `rating`. Pentru a restrânge setul luat în calcul pentru analiză, vom mai adăuga un `query` la `aggs`, precum în exemplul de mai jos pentru a restrânge agregarea doar la documentele care au un `rating` de cel puțin valoarea `5.0`.
+
+```bash
 GET /rating/_search
 {
   'size': 0,
@@ -50,9 +54,9 @@ GET /rating/_search
 Single value numeric metric aggregations este un nigur număr care poate fi un average.
 Multi-value numeric metric aggregations sunt numere care indică aspecte ale documentelor.
 
-Cea mai simplă agregare ar fi să numărăm câte documente sunt. De fapt, ca să fim exacție este numărul de documente care a fost utilizat de Elasticsearch pentru a face agregarea.
+Cea mai simplă agregare ar fi să numărăm câte documente sunt. De fapt, ca să fim exacți este numărul de documente care a fost utilizat de Elasticsearch pentru a face agregarea.
 
-```yaml
+```bash
 GET /produse/_search
 {
   "size": 0,
@@ -68,7 +72,7 @@ GET /produse/_search
 
 Un alt exemplu, ar fi să obținem documentele care au rating pentru un anume fragment de text căutat.
 
-```yaml
+```bash
 GET /rating/_search
 {
   'size': 0,
@@ -91,7 +95,7 @@ GET /rating/_search
 
 Adună numerele.
 
-```yaml
+```bash
 GET /produse/_search
 {
   "size": 0,
@@ -107,7 +111,7 @@ GET /produse/_search
 
 Elasticsearch permite mai multe agregări menționate una după alta.
 
-```yaml
+```bash
 GET /movies/_search
 {
   "aggs": {
@@ -142,7 +146,7 @@ GET /movies/_search
 
 ### Stats
 
-```yaml
+```bash
 GET /movies/_search
 {
   "aggs": {
@@ -177,7 +181,7 @@ Vom obține un set agregat de rezultate asemănător cu următorul:
 
 În loc de a crea agregări de natură numerică, se vor crea așa-numitele găleți (*bucket*), care sunt seturi de documente strânse laolaltă în baza unor criterii. Un lucru important pe care trebuie să-l știți despre numărul documentelor este că aceste cifre sunt aproximative datorită naturii distribuite a unui cluster. Un index este distribuit între mai multe sharduri din oficiu. Nodul cu rol de coordonare, la momentul în care se face o cerere va cere numerele documentelor din fiecare shard. Dacă documentele sunt răspândite pe mai multe shard-uri, acelea vor fi trecute cu vederea din mai multe rațiuni.
 
-```yaml
+```bash
 GET /movies/_search
 {
   "aggs": {
@@ -242,7 +246,7 @@ Câteva reguli privind constituirea agregărilor:
 
 ### Exemplu de agregare imbricată
 
-```yaml
+```bash
 GET /resedus0/_search
 {
   "size": 0,
@@ -272,7 +276,7 @@ GET /resedus0/_search
 
 Se observă agregarea imbricată în `"stats_clase"` numită `"discipline_stats"`. Această imbricare va produce rezultate similare cu:
 
-```yaml
+```json
 {
   "took" : 0,
   "timed_out" : false,
@@ -356,7 +360,7 @@ Se observă agregarea imbricată în `"stats_clase"` numită `"discipline_stats"
 
 Filtrările în agregări îți oferă posibilitatea de a forma bucket-uri după anumite criterii.
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -422,7 +426,7 @@ Vom obține un rezultat similar cu următorul obiect:
 
 Poți include mult mai multe date statistice pentru fiecare bucket.
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -508,7 +512,7 @@ Creând `"type": "keyword"` menționăm faptul că dorim în index să existe o 
 
 Plaje de valori cifrice
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -534,7 +538,7 @@ GET /movies/_search
 
 Plaje de ani
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -605,7 +609,7 @@ cu un rezultat asemănător cu:
 
 În cazul range-urilor pentru date calendaristice, se pot folosi și calculele de tipul `2001-01-01||+1w`. Pentru a îmbunătăți lizibilitatea, putem introduce formatul de dată calendaristică: "format": "yyyy-MM-dd", precum mai jos:
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -659,7 +663,7 @@ cu o afișare a datelor:
 
 Pentru a îmbunătăți și mai mult lizibilitatea, ar trebui activată proprietatea `"keyed":true`, iar la fiecare range specificat numele cheii sub care să apară în rezultate:
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -716,7 +720,7 @@ cu un rezultat:
 
 Bucket-urile pot fi constituite și din fragemnte mici de date care însumate constituie totalul documentelor.
 
-```yaml
+```bash
 GET /movies/_search
 {
   "size": 0,
@@ -809,7 +813,7 @@ O altă histogramă penru a vedea câte filme au fost produse la fiecare 10 ani.
 
 ### Serii temporale
 
-```yaml
+```bash
 "aggs": {
     "query": {
         "match": {

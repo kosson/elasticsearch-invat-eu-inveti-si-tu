@@ -49,7 +49,7 @@ Aceste date sunt de tip numeric:
 
 ### Date data type
 
-Acest tip este folosit pentru a păstra date.
+Acest tip este folosit pentru a păstra date calendaristice.
 
 ### Boolean Type
 
@@ -177,7 +177,7 @@ Pentru array-urile de obiecte, vezi [nested](https://www.elastic.co/guide/en/ela
 
 Un exemplu care oferă claritate este cel al etichetelor aplicate unui document.
 
-```yaml
+```javascript
 PUT /book/_mapping
 {
 	"properties": {

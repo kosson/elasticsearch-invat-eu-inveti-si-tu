@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)"
+   sodipodi:docname="queryuri-solicitante.svg"
+   inkscape:export-filename="/home/nicolaie/Desktop/DEVELOPMENT/ELASTICSEARCH/elasticsearch-invat-eu-inveti-si-tu/cautare-query-dsl/img/queriuriSolicitante.png"
+   inkscape:export-xdpi="200"
+   inkscape:export-ydpi="200"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.60394747"
+     inkscape:cx="620.08704"
+     inkscape:cy="472.72323"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 189.32349,79.924749 0.0344,25.501341"
+       id="path37502"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9-9"
+       inkscape:connection-end="#rect16224-8-18" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 78.299417,79.636995 77.98601,125.7179"
+       id="path28512"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9"
+       inkscape:connection-end="#rect16224-8-1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 78.156568,79.636995 76.796159,137.49173"
+       id="path28514"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9"
+       inkscape:connection-end="#rect16224-8-98" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 78.049829,79.636995 76.84866,113.00053"
+       id="path28510"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9"
+       inkscape:connection-end="#rect16224-8-8" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 77.840315,79.636995 76.563541,100.73544"
+       id="path28508"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9"
+       inkscape:connection-end="#rect16224-8-9" />
+    <rect
+       style="fill:#da416c;stroke-width:0.758;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16003"
+       width="54.985939"
+       height="17.094351"
+       x="0.57907695"
+       y="62.471149"
+       ry="2.4295416" />
+    <rect
+       style="fill:#da416c;stroke-width:0.638231;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16003-9"
+       width="38.98243"
+       height="17.094351"
+       x="58.866333"
+       y="62.542645"
+       ry="2.4295416" />
+    <rect
+       style="fill:#ad7f98;stroke-width:0.902857;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect846"
+       width="49.591534"
+       height="6.8740478"
+       x="81.75972"
+       y="42.805504"
+       ry="2.4295416" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="83.823318"
+       y="47.067993"
+       id="text2368"><tspan
+         sodipodi:role="line"
+         id="tspan2366"
+         style="font-size:4.23333px;stroke-width:0.264583"
+         x="83.823318"
+         y="47.067993">query-uri solicitante</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583;fill:#ffccd6"
+       x="29.57855"
+       y="67.30323"
+       id="text8747"><tspan
+         sodipodi:role="line"
+         id="tspan8745"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="29.57855"
+         y="67.30323">fac scanări liniare</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="29.57855"
+         y="72.594894"
+         id="tspan8751">pentru a face potriviri </tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="29.57855"
+         y="77.886559"
+         id="tspan8755">ale documentelor</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583;fill:#ffccd6"
+       x="78.410736"
+       y="67.232735"
+       id="text8747-9"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="78.410736"
+         y="67.232735"
+         id="tspan8755-1">taxează puternic</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="78.410736"
+         y="72.524399"
+         id="tspan15078">din capul</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583;fill:#ffccd6"
+         x="78.410736"
+         y="77.816055"
+         id="tspan14352">locului</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.700637;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224"
+       width="35.897415"
+       height="7.9658504"
+       x="9.9320621"
+       y="89.119598"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="27.287519"
+       y="94.122459"
+       id="text8747-3"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="27.287519"
+         y="94.122459"
+         id="tspan8755-8">script queries</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 95.667867,49.679552 54.267772,62.74881"
+       id="path17338"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect846"
+       inkscape:connection-end="#rect16003" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 27.998017,79.5655 -0.08275,9.554098"
+       id="path17442"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003"
+       inkscape:connection-end="#rect16224" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 102.65498,49.679552 88.057306,62.542645"
+       id="path17546"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect846"
+       inkscape:connection-end="#rect16003-9" />
+    <rect
+       style="fill:#ff869d;stroke-width:0.699618;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8"
+       width="35.793114"
+       height="7.9658504"
+       x="58.470413"
+       y="88.799675"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="75.825867"
+       y="93.802536"
+       id="text8747-3-5"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="75.825867"
+         y="93.802536"
+         id="tspan8755-8-0">fuzzy queries</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="109.41083"
+       y="112.48421"
+       id="text8747-3-5-10"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="109.41083"
+         y="112.48421"
+         id="tspan8755-8-0-30">cu excepția </tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="109.41083"
+         y="117.77588"
+         id="tspan26760">câmpurilor</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="109.41083"
+         y="123.06754"
+         id="tspan26762">wildcard</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.699618;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-9"
+       width="35.793114"
+       height="7.9658504"
+       x="58.425957"
+       y="100.73544"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="75.781403"
+       y="105.73829"
+       id="text8747-3-5-6"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="75.781403"
+         y="105.73829"
+         id="tspan8755-8-0-3">regexp queries</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.699618;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-8"
+       width="35.793114"
+       height="7.9658504"
+       x="58.808708"
+       y="113.00053"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="76.164185"
+       y="118.0034"
+       id="text8747-3-5-5"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="76.164185"
+         y="118.0034"
+         id="tspan8755-8-0-6">prefix queries</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.720085;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-1"
+       width="37.917919"
+       height="7.9658504"
+       x="58.999962"
+       y="125.7179"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="77.942924"
+       y="130.72076"
+       id="text8747-3-5-1"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="77.942924"
+         y="130.72076"
+         id="tspan8755-8-0-5">wildcard queries</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.699618;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-98"
+       width="35.793114"
+       height="7.9658504"
+       x="58.805946"
+       y="137.49173"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="76.161392"
+       y="142.49458"
+       id="text8747-3-5-4"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="76.161392"
+         y="142.49458"
+         id="tspan8755-8-0-8">range queries</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 77.57324,79.636995 -0.840788,9.16268"
+       id="path28506"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9"
+       inkscape:connection-end="#rect16224-8" />
+    <rect
+       style="fill:#da416c;stroke-width:0.475328;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16003-9-4"
+       width="21.622246"
+       height="17.094351"
+       x="101.55294"
+       y="62.542645"
+       ry="2.4295416" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="112.63065"
+       y="69.349403"
+       id="text8747-9-4"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="112.63065"
+         y="69.349403"
+         id="tspan14352-7">joining</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="112.63065"
+         y="74.641068"
+         id="tspan28946">queries</tspan></text>
+    <rect
+       style="fill:#da416c;stroke-width:0.638231;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16003-9-6"
+       width="38.98243"
+       height="17.094351"
+       x="127.48"
+       y="62.820797"
+       ry="2.4295416" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="147.02441"
+       y="69.627556"
+       id="text8747-9-3"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="147.02441"
+         y="69.627556"
+         id="tspan14352-5">pe geoshape-uri</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="147.02441"
+         y="74.91922"
+         id="tspan30506">deprecated</tspan></text>
+    <rect
+       style="fill:#da416c;stroke-width:0.638231;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16003-9-9"
+       width="38.98243"
+       height="17.094351"
+       x="169.82076"
+       y="62.830399"
+       ry="2.4295416" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;fill:#ffccd6;stroke-width:0.264583"
+       x="189.36516"
+       y="67.520493"
+       id="text8747-9-6"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="189.36516"
+         y="67.520493"
+         id="tspan14352-78">costuri mari</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="189.36516"
+         y="72.812157"
+         id="tspan31178">per</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;fill:#ffccd6;stroke-width:0.264583"
+         x="189.36516"
+         y="78.103821"
+         id="tspan31180">document</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 107.35896,49.679552 3.00702,12.863093"
+       id="path32508"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect846"
+       inkscape:connection-end="#rect16003-9-4" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 112.08414,49.679552 21.13845,13.141245"
+       id="path32510"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect846"
+       inkscape:connection-end="#rect16003-9-6" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 117.8718,49.679552 51.94896,15.778092"
+       id="path32512"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect846"
+       inkscape:connection-end="#rect16003-9-9" />
+    <rect
+       style="fill:#ff869d;stroke-width:0.889443;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-5"
+       width="35.793114"
+       height="12.874964"
+       x="171.1796"
+       y="87.737076"
+       ry="1.8103789" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="188.53505"
+       y="92.739937"
+       id="text8747-3-5-7"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="188.53505"
+         y="92.739937"
+         id="tspan8755-8-0-4">script_score</tspan><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="188.53505"
+         y="98.031601"
+         id="tspan33971"> queries</tspan></text>
+    <rect
+       style="fill:#ff869d;stroke-width:0.720348;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect16224-8-18"
+       width="37.945663"
+       height="7.9658504"
+       x="170.3904"
+       y="105.42609"
+       ry="1.1200969" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="189.53198"
+       y="110.42896"
+       id="text8747-3-5-59"><tspan
+         sodipodi:role="line"
+         style="font-size:4.23333px;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         x="189.53198"
+         y="110.42896"
+         id="tspan8755-8-0-7">percolate queries</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 189.22356,79.924749 -0.0808,7.812327"
+       id="path37500"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#rect16003-9-9"
+       inkscape:connection-end="#rect16224-8-5" />
+  </g>
+</svg>

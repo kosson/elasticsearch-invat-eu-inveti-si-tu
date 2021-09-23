@@ -70,7 +70,7 @@ GET /proximity/_search
 ```
 
 Va aduce un rezultat cu patru din cele cinci. Cel de-al cincilea are doi termeni între: `Ceva întunecat și neașteptat`. Dacă valoarea lui slop ar fi 2, atunci ar fi permisă și permutarea termenilor. Pentru un slop de 2, vom găsit toate documentele care au termenii din `query` indiferent ce este între ei. Acesta este motivul pentru care în setul rezultatelor vom avea și documentul cu id-ul 7 în care termenii sunt inversați.
-Câtă vreme nu este depășit numprul indicat de slop, termenii pot fi rotiți între ei.
+Câtă vreme nu este depășit numărul indicat de slop, termenii pot fi rotiți între ei.
 
 Cu cât termenii sunt mai apropiați în documentele căutate, cu atât vor fi scorul mai bun. Totuși, nu uita că scorul este totuși influiențat de mulți alți factori. Pentru a putea influiența scorul privind relevanța, vom transforma `match_phrase` într-un `bool`. Adu-ți aminte că în cazul unui `bool`, din oficiu termenii sunt evaluați cu OR.
 
@@ -93,7 +93,7 @@ GET /proximity/_search
 }
 ```
 
-În cazul de mai sust, toate documentele vor fi în rezultat. Pentru a restrânge, vom folosi `should`. Acest should, dacă găsește document care să-l satisfacă, scorul va fi boosted pentru acelea.
+În cazul de mai sust, toate documentele vor fi în rezultat. Pentru a restrânge, vom folosi `should`. Acest `should`, dacă găsește un document care să se potrivească, scorul va fi boosted pentru respectivul/le.
 
 ```json
 GET /proximity/_search
@@ -168,13 +168,15 @@ De cele mai multe ori setarea lui `fuzziness` la valoarea `auto` conduce la rezo
 
 ## Fuzzy queries
 
+Poți crea și query-uri fuzzy.
+
 ```json
 GET /movies/_search
 {
   "query": {
     "fuzzy": {
       "title": {
-        "value": "star",
+        "value": "stringulcautat",
         "fuzziness": "auto"
       }
     }
