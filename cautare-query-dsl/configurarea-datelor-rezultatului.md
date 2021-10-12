@@ -1,4 +1,4 @@
-# Formatarea rezultatelor
+# Configurarea datelor rezultatelor
 
 ## Precizarea formatului de date
 
@@ -15,7 +15,7 @@
 
 ## Selecția câmpurilor
 
-Poți activa și/sau dezactiva datele câmpurilor din obiectul returnat în urma unei căutări. Acest lucru se face setând câmpurile pentru care nu avem nevoie de date la valoarea `false`.
+Poți activa și/sau dezactiva aducerea datelor câmpurilor în obiectul returnat. Acest lucru se face setând câmpurile pentru care nu avem nevoie de date la valoarea `false`. Dacă nu dorim datele deloc, vom seta proprietatea `source` cu valoarea `false`.
 
 ```yaml
  GET /movies/_search
@@ -125,7 +125,7 @@ Pentru a aduce datele unui singur câmp, îi vom da lui `"_source"` numele câmp
 }
 ```
 
-Pentru cazul în care ai obiecte, la `"_source"` vei da drept valoare calea către respectivul câmp.
+Pentru cazul în care ai obiecte ca valoare a unui câmp, vei introduce la `"_source"` calea aplatixată folosind sintaxa cu punct.
 
 ```yaml
  GET /movies/_search
@@ -141,7 +141,7 @@ Pentru cazul în care ai obiecte, la `"_source"` vei da drept valoare calea căt
  }
  ```
 
- Pentru a obține toate proprietățile unui obiect al unui document, se poate pune wildcard-ul steluță:
+ Pentru a obține toate proprietățile unui obiect care este valoarea unui câmp din document, se poate pune wildcard-ul steluță:
 
  ```yaml
  GET /movies/_search
@@ -173,7 +173,7 @@ Pentru cazul în care ai obiecte, la `"_source"` vei da drept valoare calea căt
  }
  ```
 
-Pentru a configura deplin datele pe care dorești să le aduci, poți configura un obiect pentru proprietatea `_source`. De exemplu, vrem să aducem informații despre ingrediente, dar fără numele ingredientului.
+Pentru a configura deplin datele pe care dorești să le aduci, poți crea un obiect pentru proprietatea `_source`. De exemplu, vrem să aducem informații despre ingrediente, dar fără numele ingredientului.
 
   ```yaml
  GET /movies/_search
@@ -231,7 +231,7 @@ sau
 
 Numărul de rezultate dintr-un set returnat este setat din oficiu la 10.
 
-## Setarea unui offset
+## Setarea unui offset pentru paginare
 
 ```yaml
  GET /movies/_search
@@ -314,4 +314,4 @@ GET /movies/_search
 
 ## Filtre
 
-Fitrele oferă un răspuns în funcție de concluzia pozitivă sau negativă în urma evaluării. Filtrele nu afectează scorurile privind relevanța. Acestea sunt folosite, de obicei pentru numere și date calendaristice. Elastisearch face caching la filtre.
+Filtrele oferă un răspuns în funcție de concluzia pozitivă sau negativă în urma evaluării. Filtrele nu afectează scorurile privind relevanța. Acestea sunt folosite, de obicei pentru numere și date calendaristice. Elastisearch face caching la filtre.

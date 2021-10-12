@@ -51,7 +51,7 @@ GET /rating/_search
 
 ## Metric aggregations
 
-Single value numeric metric aggregations este un nigur număr care poate fi un average.
+Single value numeric metric aggregations este un singur număr care poate fi un average.
 Multi-value numeric metric aggregations sunt numere care indică aspecte ale documentelor.
 
 Cea mai simplă agregare ar fi să numărăm câte documente sunt. De fapt, ca să fim exacți este numărul de documente care a fost utilizat de Elasticsearch pentru a face agregarea.
@@ -70,7 +70,7 @@ GET /produse/_search
 }
 ```
 
-Un alt exemplu, ar fi să obținem documentele care au rating pentru un anume fragment de text căutat.
+Un alt exemplu ar fi să obținem documentele care au rating pentru un anume fragment de text căutat.
 
 ```bash
 GET /rating/_search
@@ -246,39 +246,162 @@ Câteva reguli privind constituirea agregărilor:
 
 ### Exemplu de agregare imbricată
 
+Pentru un mapping precum următorul.
+
+```javascript
+    settings: {
+        index : {
+            number_of_shards:   3,
+            number_of_replicas: 2
+        },
+        analysis: {
+            analyzer: {
+                romanianlong: {
+                    type: "custom",
+                    tokenizer: "standard",
+                    char_filter: [
+                        "html_strip"
+                    ],
+                    filter: [
+                        "apostrophe",
+                        "lowercase",
+                        "trim",
+                        "stemmer_cu_ro"
+                    ]
+                },
+                autocomplete: {
+                    type: "custom",
+                    tokenizer: "standard",
+                    char_filter: [
+                        "html_strip"
+                    ],
+                    filter: [
+                        "apostrophe",
+                        "lowercase",
+                        "trim",
+                        "autocomplete_filter"
+                    ]
+                }
+            },
+            filter: {
+                stemmer_cu_ro: {
+                    type: "stemmer",
+                    name: "romanian"
+                },
+                autocomplete_filter: {
+                    type: "edge_ngram",
+                    min_gram: 1,
+                    max_gram: 20
+                }
+            }
+        }
+    },
+    mappings: {
+        properties: {
+            date:             {type: "date"},
+            idContributor:    {type: "keyword"},
+            emailContrib:     {type: "keyword"},
+            uuid:             {type: "keyword"},
+            autori:           {type: "text"},
+            langRED:          {type: "keyword"},
+            title:            {
+                type: "text",
+                analyzer: "autocomplete"
+            },
+            titleI18n:        {type: "text"},
+            arieCurriculara:  {
+                type: "text",
+                fields: {
+                    raw: {
+                        type: "keyword"
+                    }
+                }
+            },
+            level:            {
+                type: "text",
+                fields: {
+                    raw: {
+                        type: "keyword"
+                    }
+                }
+            },
+            discipline:       {
+                type: "text",
+                fields: {
+                    raw: {
+                        type: "keyword"
+                    }
+                }
+            },
+            disciplinePropuse:{
+                type: "text",
+                fields: {
+                    raw: {
+                        type: "keyword"
+                    }
+                }
+            },
+            competenteGen:    {
+                type: "text",
+                fields: {
+                    raw: {
+                        type: "keyword"
+                    }
+                }
+            },
+            description:      {
+                type: "text",
+                analyzer: "romanianlong"
+            },
+            identifier:       {type: "text", store: true},
+            dependinte:       {type: "text"},
+            content:          {type: "text"},
+            bibliografie:     {type: "text"},
+            contorAcces:      {type: "long"},
+            generalPublic:    {type: "boolean"},
+            contorDescarcare: {type: "long"},
+            etichete:         {type: "text", store: true},
+            expertCheck:      {type: "boolean"}
+        }
+    },
+    aliases: {
+        resedus: {}
+    }
+```
+
+Avem o agregare pe două elemente în cascadă (arieCurriculara -> discipline) precum în exemplul de mai jos.
+
 ```bash
-GET /resedus0/_search
+GET /resursedus0/_search
 {
   "size": 0,
   "aggs": {
-      "stats_clase": {
-        "terms": {
-          "field": "level.keyword",
-          "missing": "Care nu au bucket",
-          "min_doc_count": 0,
-          "order": {
-            "_key": "asc"
-          }
-        },
-        "aggs": {
-          "discipline_stats": {
-            "terms": {
-              "field": "discipline.keyword",
-              "missing": "neprecizat",
-              "min_doc_count": 0
+    "arieCurriculara": {
+      "terms": {
+        "field": "arieCurriculara.raw"
+      },
+      "aggs": {
+        "discipline": {
+          "terms": {
+            "field": "discipline.raw",
+            "missing": "neprecizat",
+            "min_doc_count": 0,
+            "order": {
+              "_key": "asc"
             }
           }
         }
       }
+    }
   }
 }
 ```
 
-Se observă agregarea imbricată în `"stats_clase"` numită `"discipline_stats"`. Această imbricare va produce rezultate similare cu:
+Vom avea un rezultat similar cu următorul mai jos.
 
 ```json
 {
-  "took" : 0,
+  "took" : 1,
   "timed_out" : false,
   "_shards" : {
     "total" : 3,
@@ -288,64 +411,129 @@ Se observă agregarea imbricată în `"stats_clase"` numită `"discipline_stats"
   },
   "hits" : {
     "total" : {
-      "value" : 7,
+      "value" : 95,
       "relation" : "eq"
     },
     "max_score" : null,
     "hits" : [ ]
   },
   "aggregations" : {
-    "stats_clase" : {
+    "arieCurriculara" : {
       "doc_count_error_upper_bound" : 0,
       "sum_other_doc_count" : 0,
       "buckets" : [
         {
-          "key" : "Care nu au bucket",
-          "doc_count" : 0,
-          "discipline_stats" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [ ]
-          }
-        },
-        {
-          "key" : "Clasa a IV-a",
-          "doc_count" : 3,
-          "discipline_stats" : {
+          "key" : "Om și societate",
+          "doc_count" : 78,
+          "discipline" : {
             "doc_count_error_upper_bound" : 0,
             "sum_other_doc_count" : 0,
             "buckets" : [
               {
-                "key" : "neprecizat",
-                "doc_count" : 3
-              }
-            ]
-          }
-        },
-        {
-          "key" : "Clasa a V-a",
-          "doc_count" : 3,
-          "discipline_stats" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [
-              {
-                "key" : "neprecizat",
-                "doc_count" : 3
-              }
-            ]
-          }
-        },
-        {
-          "key" : "Clasa a VI-a",
-          "doc_count" : 1,
-          "discipline_stats" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [
-              {
-                "key" : "neprecizat",
+                "key" : "Comunicare în limba română",
                 "doc_count" : 1
+              },
+              {
+                "key" : "Fizică",
+                "doc_count" : 1
+              },
+              {
+                "key" : "Istorie",
+                "doc_count" : 70
+              },
+              {
+                "key" : "Matematică",
+                "doc_count" : 2
+              },
+              {
+                "key" : "neprecizat",
+                "doc_count" : 4
+              }
+            ]
+          }
+        },
+        {
+          "key" : "Matematică și științe ale naturii",
+          "doc_count" : 11,
+          "discipline" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "Comunicare în limba română",
+                "doc_count" : 0
+              },
+              {
+                "key" : "Fizică",
+                "doc_count" : 0
+              },
+              {
+                "key" : "Istorie",
+                "doc_count" : 4
+              },
+              {
+                "key" : "Matematică",
+                "doc_count" : 1
+              },
+              {
+                "key" : "neprecizat",
+                "doc_count" : 6
+              }
+            ]
+          }
+        },
+        {
+          "key" : "Educație fizică și sport",
+          "doc_count" : 7,
+          "discipline" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "Comunicare în limba română",
+                "doc_count" : 0
+              },
+              {
+                "key" : "Fizică",
+                "doc_count" : 0
+              },
+              {
+                "key" : "Istorie",
+                "doc_count" : 3
+              },
+              {
+                "key" : "Matematică",
+                "doc_count" : 0
+              },
+              {
+                "key" : "neprecizat",
+                "doc_count" : 4
+              }
+            ]
+          }
+        },
+        {
+          "key" : "Limbă și comunicare",
+          "doc_count" : 4,
+          "discipline" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "Comunicare în limba română",
+                "doc_count" : 4
+              },
+              {
+                "key" : "Istorie",
+                "doc_count" : 0
+              },
+              {
+                "key" : "Matematică",
+                "doc_count" : 0
+              },
+              {
+                "key" : "neprecizat",
+                "doc_count" : 0
               }
             ]
           }
@@ -465,20 +653,22 @@ GET /movies/_search
 Se poate face și un query pentru a reduce numărul de rezultate.
 
 ```json
-"query": {
-  "match_phrase": {
-    "title": "Amintiri din copilărie"
-  }
-},
-"aggs": {
-  "titluri": {
-    "terms": {
-      "field": "titlu.original"
-    },
-    "aggs": {
-      "media_ratingurilor": {
-        "avg": {
-          "field": "aprecieri"
+{
+  "query": {
+    "match_phrase": {
+      "title": "Amintiri din copilărie"
+    }
+  },
+  "aggs": {
+    "titluri": {
+      "terms": {
+        "field": "titlu.original"
+      },
+      "aggs": {
+        "media_ratingurilor": {
+          "avg": {
+            "field": "aprecieri"
+          }
         }
       }
     }
@@ -718,7 +908,7 @@ cu un rezultat:
 
 ## Histograme
 
-Bucket-urile pot fi constituite și din fragemnte mici de date care însumate constituie totalul documentelor.
+Bucket-urile pot fi constituite și din fragmente mici de date care însumate constituie totalul documentelor.
 
 ```bash
 GET /movies/_search
@@ -736,7 +926,7 @@ GET /movies/_search
 }
 ```
 
-combinarea cu un query, va redimensiona intervalul și numărul documentelor agregate. Se poate preciza care sunt dimensiunile fiecărui bucket dacă acest lucru este cerut.
+Combinarea cu un query, va redimensiona intervalul și numărul documentelor agregate. Se poate preciza care sunt dimensiunile fiecărui bucket dacă acest lucru este cerut.
 
 ```json
 GET /movies/_search

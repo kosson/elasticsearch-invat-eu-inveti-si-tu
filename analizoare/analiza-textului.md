@@ -239,7 +239,7 @@ POST /testanalizori/_analyze
 
 Să mai lucrăm la analizorul nostru customizat pentru limba română. Pe lângă analizorul custom dedicat *stop word-urilor*, vom mai introduce unul cu mai multe particularități pe care-l vom numi `analizor special`.
 
-```yaml
+```bash
 PUT /testanalizori2
 {
   "settings": {

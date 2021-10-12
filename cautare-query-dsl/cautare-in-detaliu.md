@@ -9,7 +9,7 @@ Un alt aspect important al căutărilor pe care le poți face pe documentele din
 
 Căutarea pe termeni (*term query*) se face direct pe indexul inversat, iar o căutare *match query* mai întâi va face o analiză a textului și abia după aceea va căuta în indexul inversat. Căutarea va aduce rezultate în al doilea caz pentru că anterior și textul documentelor a trecut prin același proces de analiză (analizorul folosit pentru câmp este același și pentru textul de căutare).
 
-În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elastisearch oferă automat acest model în cazul în care nu s-a definit un mapping, ci s-a lăsat la lucru mapping-ul dinamic (*dynamic mapping*).
+În Elastisearch fiecare câmp care are o valoare text este automat tratat deopotrivă ca un câmp `text`, dar și ca un câmp `keyword`. Elasticsearch oferă automat acest model în cazul în care nu s-a definit un mapping, ci s-a lăsat la lucru mapping-ul dinamic (*dynamic mapping*).
 
 ## Analizori și tokenizatori
 
@@ -495,34 +495,6 @@ GET /movies/_search
   }
 }
 ```
-
-## Paginarea rezultatelor
-
-Pentru a realiza un serviciu coerent de paginare mai întâi de toate avem nevoie să calculăm care este numărul total de pagini care sunt disponibile. Limitarea Elasticsearch-ului este de 10.000 de rezultate gestionate astfel. Reține faptul că fiecare cerere este una stateless. Atunci când lucrăm cu Elasticsearch nu avem la dispoziție vreun cursor așa cum este cazul bazelor de date relaționale. Încă o precizare este că toate calculele se fac pe baza unor numere stabilite conform unui set la un moment dat. Dacă au fost adăugate sau șterse documente între timp, acest lucru se va reflecta în rezultatele de paginare. În bazele de date relaționale setul pentru care s-a stabilit un cursor rămâne stabil până în momentul în care nu mai este folosit. Nu este cazul Elasticsearch.
-
-Pentru a oferi Elasticsearch numerele neceare, la nivel de aplicație trebuie făcute niște calcule:
-
-- Formula de calcul este **toate_paginile = ceil(total_hits/dimensiunea_paginii)**.
-- Parametrul `from`, adică offset-ul se calculează după următoarea formulă: **from = (dimensiunea_paginii * (numărul_paginii_prezente - 1))**.
--
-Pentru a obține rezultate care să poată fi paginate, ceea ce trebuie făcut este să fie specificat în query `from` și `size`. Numărătoarea începe de la `0`.
-
-```bash
-curl -H "Content-Type: application/json" -XGET '127.0.0.1:9200/movies/_search?pretty' -d '
-{
-  "from": 0,
-  "size": 3,
-  "query": {
-    "match": {
-      "genre": "Sci-Fi"
-    }
-  }
-}'
-```
-
-Buna practică spune ca paginarea să se facă pe seturi mici de date. Altfel, Elasticsearch va trebui să le aduca pe toate, să le sorteze și să ofere segmentul dorit în intervalul specificat. Deci, seturi mici.
-
-Paginarea în mare adâncime, poate avea un impact asupra performanței. Fiecare rezultat trebuie adus de la server. Pentru a evita aceste probleme, setează o limită de rezultate maxime care poate fi adusă utilizatorului.
 
 ## Sortarea rezultatelor
 

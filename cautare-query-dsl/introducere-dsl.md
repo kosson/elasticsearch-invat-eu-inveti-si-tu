@@ -45,7 +45,7 @@ Trebuie precizat faptul că un enunț *compound* poate combina oricare alte enun
 
 Chiar dacă atunci când ne referim la DSL-ul Elastisearch-ului ca la un singur lucru, de fapt trebuie să-l privim ca DSL-ul query-urilor și DSL-ul filtrărilor.
 
-Un filtru acționează ca o întrebare da sau nu pentru fiecare document și folosește câmpuri care au valori precise. Un query este similar unui filtru, dar pune și intrebarea următoare: *cât de bine se potrivește acest document*? Un query calculează cât de relevant este un document.
+Un filtru acționează ca o întrebare `da` sau `nu` pentru fiecare document și folosește câmpuri care au valori precise. Un query este similar unui filtru, dar pune și intrebarea următoare: *cât de bine se potrivește acest document*? Un query calculează cât de relevant este un document.
 
 ### Query context
 
@@ -66,13 +66,13 @@ Un exemplu simplu ar fi căutarea tuturor documentelor care au în titlu termenu
 
 #### match_all
 
-Este o interogare care caută în toate câmpurile documentelor. Dacă nu menționezi niciun criteriu de căutare, va aduce doate documentele indexului.
+Este o interogare care caută în toate câmpurile documentelor. Dacă nu menționezi niciun criteriu de căutare, va aduce toate documentele indexului.
 
 ```json
 { "match_all": {}}
 ```
 
-Această interogare este utilizată frecvent cu un filtru. Toate documentele sunt considerate a fi egale ca relevanță așa că vor primi un `_score` de 1.
+Această interogare este utilizată frecvent împreună cu un filtru. Toate documentele sunt considerate a fi egale ca relevanță așa că vor primi un `_score` de 1.
 
 #### match
 
@@ -84,7 +84,7 @@ Această interogare ar trebui folosită pentru căutarea full-text sau o anumit�
 
 #### match_phrase
 
-Atunci când ai nevoie să cauți toți termenii în ordinea în care au fost menționați, vei folosi `match-phrase`. Acest lucru este posibil Pentru că în indexul inversat este memorată și ordinea în care termenii apar.
+Atunci când ai nevoie să cauți toți termenii în ordinea în care au fost menționați, vei folosi `match-phrase`. Acest lucru este posibil pentru că în indexul inversat este memorată și ordinea în care termenii apar.
 
 ```json
 {
@@ -127,7 +127,7 @@ Filtrul `term` este folosit pentru a filtra după valori exacte, fie acestea dat
 
 #### terms
 
-Varianta la plural permite menționarea a mai multor termeni.
+Varianta la plural permite menționarea mai multor termeni.
 
 ```json
 {"terms": {"etichete": ["ceva", "altceva", "undeva"]}}

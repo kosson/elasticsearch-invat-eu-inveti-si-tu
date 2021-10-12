@@ -36,7 +36,7 @@ GET /piese/_search
 }
 ```
 
-În cazul în care `bool` se află într-un context de filtrare, `should` trebuie satisfăcut. În cazul în care într-un `bool` avem un singur `should`, acesta devine element care trebui satisfăcut. Specificarea query-urilor într-un array permite mai multe query-uri de același tip. Dacă lui `must` i se asociază un obiect, acest lucru nu mai este posibil.
+În cazul în care `bool` se află într-un context de filtrare, `should` trebuie satisfăcut. În cazul în care într-un `bool` avem un singur `should`, acesta devine element care trebuie satisfăcut. Specificarea query-urilor într-un array permite mai multe query-uri de același tip. Dacă lui `must` i se asociază un obiect, acest lucru nu mai este posibil.
 
 În cazul în care vrei să vezi ce impact au fiecare dintre etapele de *query*, trebuie să le dai câte un nume cu ajutorul căruia să identifici în rezultate etapele.
 
@@ -132,7 +132,7 @@ Aceste interogări se construiesc folosind mai mulți termeni booleani intitula�
 
 ## Occur `should`
 
-Cerințele trebuie să fie satisfăcute de cerințele menționate.
+Documentele trebuie să corespundă cerințelor menționate.
 
 ```json
 "should" : [
@@ -152,7 +152,7 @@ Dacă un query `bool` include cel puțin o interogare `should` dar niciun `must`
 
 ## Acordarea unui scor cu `bool.filter`
 
-Interogările de sub un `filter`, nu acordă niciun scor documentelor găsite. Valaorea lui `_score` fiind 0. De exemplu, următoarele interogări vor aduce toate documentele care au câmpul `status` setat la valoarea `active`. Primul acordă un scor de 0 tuturor documentelor.
+Interogările de sub un `filter`, nu acordă niciun scor documentelor găsite. Valorea lui `_score` fiind 0. De exemplu, următoarele interogări vor aduce toate documentele care au câmpul `status` setat cu valoarea `active`. Primul acordă un scor de 0 tuturor documentelor.
 
 ```json
 {

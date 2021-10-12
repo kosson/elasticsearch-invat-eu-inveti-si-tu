@@ -10,9 +10,17 @@ Elasticsearch este o tehnologie folosită pentru a analiza date, fie acestea tex
 
 Suita Elastic folosește un limbaj propriu utilizat la interogare numit *Query DSL* (Domain Specific Language). În esență acesta constă dintr-un obiect JSON care parametrează căutarea.
 
+Elasticsearch este un *document store* distribuit. În loc de a stoca informație în râdurile unei tabele, Elastisearch stochează structuri de date complexe serializate ca documente JSON. Atunci când ai mai multe noduri Elasticsearch într-un cluster, documentele stocate sunt distribuite în cluster și pot fi accesate imediat din oricare dintre noduri.
+
+Elasticsearch folosește o structură de date numită index inversat care oferă o regăsire foarte rapidă în cazul căutării full-text. Un index inversat introduce într-o listă fiecare cuvânt unic care apare în oricare document și identifică toate documentele în care respectivul cuvânt apare.
+
+Un index poate fi privit ca o colecție optimizată de documente în care fiecare document este o colecție de câmpuri care sunt perechi cheie-valoare ce conțin datele. Datele fiecărui câmp vor fi indexate din oficiu. Fiecare câmp indexat are o structură de date optimizată dedicată.
+
+Câmpurile text sunt stocate în indecși inversați, iar câmpurile numerice și cele geo sunt stocate în arbori BKD. Această caracteristică de folosire a datelor la nivel de câmp, dă rapiditatea în căutările Elastisearch.
+
 Datele stau în ceea ce se numește **nod**. Aceste noduri permit o scalare orizontală. Mai multe noduri constituie un **cluster**. Clusterele sunt complet independente unele de celelalte. În Elastisearch datele sunt numite **documente**. Documentele sunt organizate în **indecși**, care au rolul de a grupa logic documentele similare. Un cluster va avea cel puțin un **index inversat**. Dacă ai un index care are trei câmpuri indexate la nivel de document, vei avea trei indexuri inversate. Indexul inversat constă din toți termenii din câmpurile indexate ale tuturor documentelor unui index.
 
-Interogarea unei instanțe de Elastisearch se face printr-un REST API. Datele de interogare sunt în format JSON.
+Interogarea unei instanțe de Elasticsearch se face printr-un REST API. Datele de interogare sunt în format JSON.
 
 ## Descrierea componentelor
 
@@ -49,3 +57,7 @@ Sunt pachete software care trimit date către Elasticsearch. Acești adevărați
 - Winlogbeat colectează loguri specifice sistemului de operare Windows;
 - Auditbeat colectează informații necesare auditării sistemelor LINUX/GNU;
 - Hearbeat monitorizează prezența servicului.
+
+## Resurse
+
+- [Introduction to Apache Lucene & Elasticsearch | Ivaylo Pavlov | youtube | Jan 31, 2021](https://www.youtube.com/watch?v=BvgGgkN3clI)

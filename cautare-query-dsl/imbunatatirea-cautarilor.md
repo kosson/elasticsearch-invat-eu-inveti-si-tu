@@ -1,4 +1,4 @@
-# Ajustarea căutărilor
+# Îmbunătățirea căutărilor
 
 ## Proximity search
 
@@ -51,7 +51,7 @@ GET /proximity/_search
 }
 ```
 
-Adu-ți aminte de faptul că în indexul inversat sunt introduși termenii, dar este memorată și ordinea în care sunt termenii în document. Termenii din sintagma de căutare sunt trecuți prin același analizor folosit pentru constituirea indexului. Acesta este motivul pentru care la o căutare cu `match_phrase`, va fi găsit doar documentul cu indexul 1.
+Adu-ți aminte de faptul că în indexul inversat sunt introduși termenii dar este memorată și ordinea în care sunt termenii în document. Termenii din sintagma de căutare sunt trecuți prin același analizor folosit pentru constituirea indexului. Acesta este motivul pentru care la o căutare cu `match_phrase`, va fi găsit doar documentul cu indexul 1.
 
 Pentru a indica faptul că termenii pot fi depărtați unii de ceilalți, se va introduce proprietatea `slop` cu o valoare care va indica distanța dintre termeni.
 
@@ -93,7 +93,7 @@ GET /proximity/_search
 }
 ```
 
-În cazul de mai sust, toate documentele vor fi în rezultat. Pentru a restrânge, vom folosi `should`. Acest `should`, dacă găsește un document care să se potrivească, scorul va fi boosted pentru respectivul/le.
+În cazul de mai sus, toate documentele vor fi în rezultat. Pentru a restrânge, vom folosi `should`. Acest `should`, dacă găsește un document care să se potrivească, scorul va fi boosted pentru respectivul/le.
 
 ```json
 GET /proximity/_search
