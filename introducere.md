@@ -12,7 +12,7 @@ Suita Elastic folosește un limbaj propriu utilizat la interogare numit *Query D
 
 Elasticsearch este un *document store* distribuit. În loc de a stoca informație în râdurile unei tabele, Elastisearch stochează structuri de date complexe serializate ca documente JSON. Atunci când ai mai multe noduri Elasticsearch într-un cluster, documentele stocate sunt distribuite în cluster și pot fi accesate imediat din oricare dintre noduri.
 
-Elasticsearch folosește o structură de date numită index inversat care oferă o regăsire foarte rapidă în cazul căutării full-text. Un index inversat introduce într-o listă fiecare cuvânt unic care apare în oricare document și identifică toate documentele în care respectivul cuvânt apare.
+Elasticsearch folosește o structură de date numită *index inversat* care oferă o regăsire foarte rapidă în cazul căutării full-text. Un index inversat introduce într-o listă fiecare cuvânt unic care apare în oricare document și identifică toate documentele în care respectivul cuvânt apare.
 
 Un index poate fi privit ca o colecție optimizată de documente în care fiecare document este o colecție de câmpuri care sunt perechi cheie-valoare ce conțin datele. Datele fiecărui câmp vor fi indexate din oficiu. Fiecare câmp indexat are o structură de date optimizată dedicată.
 
@@ -61,3 +61,4 @@ Sunt pachete software care trimit date către Elasticsearch. Acești adevărați
 ## Resurse
 
 - [Introduction to Apache Lucene & Elasticsearch | Ivaylo Pavlov | youtube | Jan 31, 2021](https://www.youtube.com/watch?v=BvgGgkN3clI)
+- [Beginner's Crash Course to Elastic Stack - Part 1: Intro to Elasticsearch and Kibana | Official Elastic Community | Beginner's Crash Course to Elastic Stack | Official Elastic Community | youtube](https://www.youtube.com/watch?v=gS_nHTWZEJ8&list=PL_mJOmq4zsHZYAyK606y7wjQtC0aoE6Es)

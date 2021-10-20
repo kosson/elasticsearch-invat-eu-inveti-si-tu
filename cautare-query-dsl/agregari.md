@@ -389,6 +389,26 @@ GET /resursedus0/_search
             "order": {
               "_key": "asc"
             }
+          },
+          "aggs": {
+            "aprecieri": {
+              "histogram": {
+                "field": "rating",
+                "interval": 1,
+                "order": {
+                  "_key": "desc"
+                }
+              }
+            }
+          }
+        },
+        "ultimii_ani": {
+          "date_histogram": {
+            "field": "date",
+            "calendar_interval": "1y",
+            "order": {
+              "_key": "desc"
+            }
           }
         }
       }
@@ -401,7 +421,7 @@ Vom avea un rezultat similar cu următorul mai jos.
 
 ```json
 {
-  "took" : 1,
+  "took" : 4,
   "timed_out" : false,
   "_shards" : {
     "total" : 3,
@@ -425,6 +445,20 @@ Vom avea un rezultat similar cu următorul mai jos.
         {
           "key" : "Om și societate",
           "doc_count" : 78,
+          "ultimii_ani" : {
+            "buckets" : [
+              {
+                "key_as_string" : "2020-01-01T00:00:00.000Z",
+                "key" : 1577836800000,
+                "doc_count" : 77
+              },
+              {
+                "key_as_string" : "2021-01-01T00:00:00.000Z",
+                "key" : 1609459200000,
+                "doc_count" : 1
+              }
+            ]
+          },
           "discipline" : {
             "doc_count_error_upper_bound" : 0,
             "sum_other_doc_count" : 0,
@@ -448,92 +482,6 @@ Vom avea un rezultat similar cu următorul mai jos.
               {
                 "key" : "neprecizat",
                 "doc_count" : 4
-              }
-            ]
-          }
-        },
-        {
-          "key" : "Matematică și științe ale naturii",
-          "doc_count" : 11,
-          "discipline" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [
-              {
-                "key" : "Comunicare în limba română",
-                "doc_count" : 0
-              },
-              {
-                "key" : "Fizică",
-                "doc_count" : 0
-              },
-              {
-                "key" : "Istorie",
-                "doc_count" : 4
-              },
-              {
-                "key" : "Matematică",
-                "doc_count" : 1
-              },
-              {
-                "key" : "neprecizat",
-                "doc_count" : 6
-              }
-            ]
-          }
-        },
-        {
-          "key" : "Educație fizică și sport",
-          "doc_count" : 7,
-          "discipline" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [
-              {
-                "key" : "Comunicare în limba română",
-                "doc_count" : 0
-              },
-              {
-                "key" : "Fizică",
-                "doc_count" : 0
-              },
-              {
-                "key" : "Istorie",
-                "doc_count" : 3
-              },
-              {
-                "key" : "Matematică",
-                "doc_count" : 0
-              },
-              {
-                "key" : "neprecizat",
-                "doc_count" : 4
-              }
-            ]
-          }
-        },
-        {
-          "key" : "Limbă și comunicare",
-          "doc_count" : 4,
-          "discipline" : {
-            "doc_count_error_upper_bound" : 0,
-            "sum_other_doc_count" : 0,
-            "buckets" : [
-              {
-                "key" : "Comunicare în limba română",
-                "doc_count" : 4
-              },
-              {
-                "key" : "Istorie",
-                "doc_count" : 0
-              },
-              {
-                "key" : "Matematică",
-                "doc_count" : 0
-              },
-              {
-                "key" : "neprecizat",
-                "doc_count" : 0
               }
             ]
           }
@@ -988,7 +936,7 @@ O histogramă afișează numărul total de documente care au fost introduse înt
   }
 ```
 
-O altă histogramă penru a vedea câte filme au fost produse la fiecare 10 ani.
+O altă histogramă pentru a vedea câte filme au fost produse la fiecare 10 ani.
 
 ```json
 "aggs": {
@@ -1147,3 +1095,8 @@ GET /unitate/_search
   }
 }
 ```
+
+## Resurse
+
+- [Beginner’s Crash Course to Elastic Stack - Part 4: Aggregations | Lisa Jung | Apr 28, 2021 | youtube](https://www.youtube.com/watch?v=iGKOdep1Iss)
+- [Part 4: Running Aggregations with Elasticsearch and Kibana](https://github.com/LisaHJung/Part-4-Running-Aggregations-with-Elasticsearch-and-Kibana)
