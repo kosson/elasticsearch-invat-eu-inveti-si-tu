@@ -12,7 +12,7 @@ Acesta este motivul pentru care se consideră că Elasticsearch permite căutare
 
 Am menționat aceste detalii pentru că în cazul unei căutări în condițiile în care se dorește o paginare, ordinea rezultatelor se poate modifica. Pentru a evita acest comportament, se poate crea un PIT (point in time).
 
-Tehnici de căutare oferite de Elastisearch:
+Tehnici de căutare oferite de Elasticsearch:
 
 - paginare from size,
 - paginare search_after
@@ -82,7 +82,27 @@ Această tehnică de căutare este *stateless*, adică nu este garantată ordine
 
 ## Căutare search_after
 
-Poți folosi parametrul `search_after` pentru a obține următoarea pagină de hituri folosind un set de valori de sortare care a fost trimis odată cu rezultatelele inițiale de căutare. Folosind această tehnică, poți să-i transmiți lui Elasticsearch ultimul hit pe care l-ai văzut pentru ca acesta să ignore toate celelalte anterioare. Căutarea folosind `search_after` va utiliza un *tiebreaker* (informație necesară stabilirii limitei de la care pornește următorul set de hituri ce va fi adus). Un tiebreaker se comportă ca un semn de carte.
+Această metodă de căutare are nevoie să fie precizat câmpul de `sort` pentru a putea fi făcută. Valoarea acestui câmp este un array care precizează cum se va face sortarea. În exemplul de mai jos, prima căutare a fost trimisă deja iar aceasta este interogarea următoare care cere următorul corp de 10 înregistrări.
+
+```text
+POST http://localhost:9200/un_index/_search
+{
+    "size": 25,
+    "query": {
+        "match_all": {}
+    },
+    "sort": [
+        {"date": "asc"}
+    ],
+    "search_after": [10]
+}
+```
+
+Remarcă faptul că există un câmp `sort` care face sortarea înregistrărilor în funcție de data calendaristică la care au fost introduse.
+
+Poți folosi parametrul `search_after` pentru a obține următoarea pagină de hituri folosind un set de valori de sortare care a fost trimis odată cu rezultatelele inițiale de căutare.
+
+Folosind această tehnică, poți să-i transmiți lui Elasticsearch ultimul hit pe care l-ai văzut pentru a fi ignorate toate celelalte anterioare. Căutarea folosind `search_after` va utiliza un *tiebreaker* (informație necesară stabilirii limitei de la care pornește următorul set de hituri ce va fi adus). Un tiebreaker se comportă ca un semn de carte.
 
 Setului de date pe care se va face căutare i se poate trimite parametri de sortare după anumite câmpuri. Fiecare sortare poate fi inversată. Sortarea este definită la nivel de câmp. De exemplu, pentru următorul mapping:
 
@@ -103,34 +123,47 @@ Setului de date pe care se va face căutare i se poate trimite parametri de sort
 }
 ```
 
-Am putea face o sortare similară cu următorul exemplu de mai jos.
+am putea face o sortare similară cu următorul exemplu de mai jos.
 
 ```json
 {
   "sort" : [
-    { "post_date" : {"order" : "asc", "format": "strict_date_optional_time_nanos"}},
+    {
+      "post_date" : {
+        "order" : "asc",
+        "format": "strict_date_optional_time_nanos"
+      }
+    },
     "user",
-    { "name" : "desc" },
+    { "name": "desc" },
     { "age" : "desc" },
     "_score"
   ],
   "query" : {
-    "term" : { "user" : "kimchy" }
+    "term" : { "user" : "adrian" }
   }
 }
 ```
 
-Folosirea lui `search_after` necesită multiple apeluri de căutare folosind același query și valori de sortare. În cazul în care apare un refresh între aceste apeluri, ordinea rezultatelor se poate modifica, fapt care conduce la apariția de rezultate fără consistență între pagini. Pentru a evita acest lucru, se poate crea ceea ce se numește *point in time* ([PIT](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/point-in-time-api.html)), cu rolul de a conserva starea curentă a indexului între căutări. Această tehnică de căutare este *stateless*, adică nu este garantată ordinea rezultatelor atunci când se navighează de la o pagină de rezultate la alta și înapoi.
+Folosirea lui `search_after` necesită multiple apeluri de căutare folosind același query și valori de sortare. Această tehnică de căutare este *stateless*, adică nu este garantată ordinea rezultatelor atunci când se navighează de la o pagină de rezultate la alta și înapoi. În cazul în care apare un refresh între aceste apeluri, ordinea rezultatelor se poate modifica, fapt care conduce la apariția de rezultate fără consistență între pagini.
 
-### Adăugarea unui point in time
+Pentru a evita acest lucru, se poate crea ceea ce se numește *point in time* ([PIT](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/point-in-time-api.html)), cu rolul de a conserva starea curentă a indexului între căutări.
+
+```text
+POST http://localhost:9200/un_index/_pit?keep_alive=1m
+```
+
+### Adăugarea unui PIT - point in time
 
 Adăugarea unui PIT, transformă o căutare stateless într-una stateful.
 
-Un PIT este constituit din cele mai recente date vizibile ale unui index. Datele sunt într-o continuă modificare. PIT-ul este o privire asupra datelor la momentul în care este constituit. A fost introdus odată cu versiunea 7.10. O căutare în Elastisearch este o căutare aplicată pe datele de la un anumit moment în timp. În contextul în care indexul se modifică în continuu, două interogări identice făcute la două momente diferite vor aduce rezultate diferite pentru că datele s-au modificat între timp. PIT-ul oferă un mecanism care elimină factorul variabilității în timp. PIT-ul permite interogarea repetată a unui index așa cum era acesta într-un anumit moment în timp.
+Un PIT este constituit din cele mai recente date vizibile ale unui index. Datele sunt într-o continuă modificare. PIT-ul este o privire asupra datelor la momentul în care este constituit. A fost introdus odată cu versiunea 7.10.
 
-În cazul în care se petrece un *refresh* între două căutări `search_after` rezultatele obținute pot conține modificări. Acest lucru se întâmplă pentru că modificările apărute între căutări sunt vizibile doar celor mai recente PIT-uri. Ceea ce trebuie să faci mai întâi, este să creezi in point-in-time, care va constitui întreg contextul necesar căutărilor multiple viitoare. Ceea ce va obține clientul în urma inițierii PIT-ului este un `id`, care va trebui să-l atașeze tuturor cererilor ulterioare.
+În contextul în care indexul se modifică în continuu, două interogări identice făcute la două momente diferite vor aduce rezultate diferite pentru că datele s-au modificat între timp. PIT-ul oferă un mecanism care elimină factorul variabilității în timp. PIT-ul permite interogarea repetată a unui index așa cum era acesta într-un anumit moment în timp.
 
-```bash
+În cazul în care se petrece un *refresh* între două căutări `search_after`, rezultatele obținute pot conține modificări. Acest lucru se întâmplă pentru că modificările apărute între căutări sunt vizibile doar celor mai recente PIT-uri. Ceea ce trebuie să faci mai întâi, este să creezi in point-in-time, care va constitui întreg contextul necesar căutărilor multiple viitoare. Ceea ce va obține clientul în urma inițierii PIT-ului este un `id`, care va trebui să-l atașeze tuturor cererilor ulterioare.
+
+```text
 POST /my-index-000001/_pit?keep_alive=1m
 ```
 
@@ -140,7 +173,7 @@ Poți folosi varianta API-ul JavaScript, precum în exemplul de mai jos.
 let pit = await esClient.openPointInTime({index: 'nume_index', keep_alive: '1m'});
 ```
 
-[API-ul](https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html) va returna un `id` al PIT-ului creat. Un PIT trebuie deschis explicit înainte de a fi utilizat în cererile de căutare. Parametrul `keep_alive` menționează care va fi durata de viață a PIT-ului și ulterior în cererile de căutare, va prelungi durata de viață a unui PIT existent sau va menționa durata de viață a celui nou format. Valorile de [timp](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/common-options.html#time-units) menționate nu trebuie să fie mari, ci cât ar fi necesar până la următoarea cerere de căutare.
+[API-ul](https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html) va returna un `id` al PIT-ului creat. Un PIT trebuie inițiat explicit înainte de a fi utilizat în cererile de căutare. Parametrul `keep_alive` menționează care va fi durata de viață a PIT-ului și ulterior în cererile de căutare, va prelungi durata de viață a unui PIT existent sau va menționa durata de viață a celui nou format. Valorile de [timp](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/common-options.html#time-units) menționate nu trebuie să fie mari, ci cât ar fi necesar până la următoarea cerere de căutare.
 
 În momentul în care perioada de timp menționată de `keep_alive` a expirat, PIT-ul este închis automat.
 
@@ -207,7 +240,7 @@ Pentru a personaliza căutarea, se poate adăuga un tiebreaker în mod explicit 
 }
 ```
 
-Rezultatul întors ar putea fi următorul.
+Rezultatul întors ar putea fi similar cu următorul:
 
 ```json
 {
@@ -235,7 +268,7 @@ Rezultatul întors ar putea fi următorul.
 }
 ```
 
-PIT-ul a fost actualizat pentru momentul de timp în care s-a făcut căutarea (`pit_id`). În array-ul cheii `sort` vei găsi valorile pentru ultimul `hit` returnat. Iar imediat, al doilea element este valoarea tiebreaker-ului care este unică petru respectivil PIT.
+PIT-ul a fost actualizat pentru momentul de timp în care s-a făcut căutarea (`pit_id`). În array-ul cheii `sort` vei găsi valorile pentru ultimul `hit` returnat. Iar imediat, al doilea element este valoarea tiebreaker-ului care este unică pentru respectivul PIT.
 
 Pentru a obține următoarea pagină de rezultate, rulează din nou ultima căutare folosind valoarea ultimului hit din array-ul sort ca valoare pentru `search_after`. Dacă folosești PIT, introdu și ultimul id de PIT în `pit.id`.
 
@@ -263,7 +296,7 @@ Pentru a obține următoarea pagină de rezultate, rulează din nou ultima căut
 ```
 
 Argumentele de la `sort` și `query` trebuie să rămână neschimbate. Dacă din motive de aplicație, trebuie să introduci argument la `from`, acesta trebuie să fie `0` (valoarea din oficiu) sau `-1`.
-Observă optimizarea pentru viteză `"track_total_hits": false`.
+Observă optimizarea pentru viteză care este câmpul `"track_total_hits": false`. Setarea acestuia la `false` dezactivează mecanismul de evidență pentru numărul total de rezultate găsite.
 
 De îndată ce au terminat căutarea, ar trebui să ștergi PIT-ul. Chiar dacă `keep_alive` va face acest lucru după expirarea timpului, buna practică spune să-l închizi dacă ai consumat datele mai devreme.
 
@@ -329,17 +362,41 @@ Pentru toate slice-urile trebuie folosit același PIT.
 
 ## Scroll pe rezultatele de căutare
 
-Pentru paginarea de mare adâncime nu este recomanadată folosirea API-ului de scrolling. Dacă treci prin mai mult de 10000 de documente, trebuie să conservi starea indexului. În aceste cazuri, cel mai potrivit este să folosești parametrul `search_after` cu PIT-uri.
+Scroll-ul este folosit pentru a conserva starea indexului cu scopul de a face o căutare. Elasticseach va returna documentele așa cum se găseau la momentul în care s-a petrecut inițializarea scroll-ului. Blocarea versiunii indexului rezolvă problemele care apar la o paginare *from/size*, unde este posibil să ratezi documente în funcție de modificările care apar în index.
+
+Pentru paginarea de mare adâncime nu este recomandată folosirea API-ului de scrolling. Dacă treci prin mai mult de 10000 de documente, trebuie să conservi starea indexului. În aceste cazuri, cel mai potrivit este să folosești parametrul `search_after` cu PIT-uri.
 
 O cerere de căutare `search` returnează o singură pagină cu rezultate. API-ul `scroll` permite aducerea unui număr mare de rezultate sau chiar a tuturor rezultatelor deodată într-o singură cerere de căutare. O astfel de căutare este similară unui cursor.
 
-Scrollingul nu este gândit pentru cereri real-time, ci pentru procesarea unor cantități mari de date cu scopul de a reindexa conținutul unui data stream sau a unui index într-un data stream nou ori indexarea cu alte configurări.
+Scrollingul nu este gândit pentru cereri real-time, ci pentru procesarea unor cantități mari de date cu scopul de a reindexa conținutul unui data stream sau a unui index într-un data stream nou ori indexarea cu alte configurări. Această procedură de căutare alocă resurse importante ale mașinii gazdă. În genere este folosită pentru cazurile în care ai nevoie să procesezi fiecare document.
 
 Pentru reindexare și scrolling, ai suport pentru NodeJS la https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/client-helpers.html.
 
 ### Cum funcționează scrolling-ul
 
-O cerere de căutare se trimite spre execuție având parametrul `scroll`. Fiecare răspuns conține un `_scroll_id` care trebuie folosit pentru următoarea cerere de căutare. După ce ai *consumat* (afișat) toate răspunsurile, poți șterge `scroll_id` pentru a elibera resursele. Ceea ce se întâmplă pe server este o *înghețare* a datelor care existau din momentul în care s-a făcut prima cerere de căutare. Totuși toate operațiunile de scriere a unor date noi în index (`delete`, `index` și `update`) care au apărut după inițierea scroll-ului, nu vor mai face parte din setul interogat. Acesta este mecanismul care garantează că setul este consistent.
+O cerere de căutare se trimite spre execuție având parametrul `scroll`.
+
+```text
+POST http://localhost:9200/test-index-v1/_search?scroll=5m
+{
+    "size": 25,
+    "query": {
+        "match_all": {}
+    }
+}
+```
+
+Fiecare răspuns conține un `scroll_id` care trebuie folosit pentru următoarea cerere de căutare.
+
+```text
+POST http://localhost:9200/_search/scroll
+{
+    "scroll": "5m",
+    "Scroll_id":"scroll_id string returned from search"
+}
+```
+
+După ce ai *consumat* (afișat) toate răspunsurile, poți șterge `scroll_id` pentru a elibera resursele. Ceea ce se întâmplă pe server este o *înghețare* a datelor care existau din momentul în care s-a făcut prima cerere de căutare. Totuși toate operațiunile de scriere a unor date noi în index (`delete`, `index` și `update`) care au apărut după inițierea scroll-ului, nu vor mai face parte din setul interogat. Acesta este mecanismul care garantează că setul este consistent.
 
 Resursele trebuie eliberate la finalul utilizării lor în interfață pentru că segmentele de date, care între timp e posibil să se fi schimbat și să fi fost și *merged*, au fost menținute pentru a avea reperul fix. Combinat cu mai multe alte căutări înseamnă o multiplicare a datelor care trebuie menținute în afara setului live. Mai multe date înseamnă mai multe segmente care trebuie ținute, mai multă memorie heap pentru metadatele segmentelor care și ele tot în memoria heap sunt, mai multe fișiere deschise ce trebuie gestionate, etc.
 
@@ -350,6 +407,7 @@ Reține un lucru foarte important: căutarea în baza unui scroll, împreună cu
 ## Resurse
 
 - [Paginate search results](https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html)
+- [Search afteredit](https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after)
 - [Sort search results](https://www.elastic.co/guide/en/elasticsearch/reference/current/sort-search-results.html)
 - [Near real-time searchedit](https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html)
 - [Point in time API](https://www.elastic.co/guide/en/elasticsearch/reference/current/point-in-time-api.html)
@@ -357,3 +415,6 @@ Reține un lucru foarte important: căutarea în baza unui scroll, împreună cu
 - [Get a consistent view of your data over time with the Elasticsearch point-in-time reader | Alexander Reelsen | 17 JUNE 2021](https://www.elastic.co/blog/get-a-consistent-view-of-your-data-over-time-with-the-elasticsearch-point-in-time-reader)
 - [Elasticsearch 7.10.0 released | George Kobar | 11 NOVEMBER 2020](https://www.elastic.co/blog/whats-new-elasticsearch-7-10-0-searchable-snapshots-store-more-for-less)
 - [Elasticsearch node js point in time search_phase_execution_exception](https://stackoverflow.com/questions/66693428/elasticsearch-node-js-point-in-time-search-phase-execution-exception)
+- [Which Pagination Technique to Use Depending on Your Use Case | Saskia | Aug-2021](https://opster.com/guides/elasticsearch/how-tos/elasticsearch-pagination-techniques/)
+- [Scrolledit | Elasticsearch JavaScript Client » Examples ](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/master/scroll_examples.html)
+- [How to Optimize Your Elasticsearch Queries Using Pagination | Joanna Boetzkes | March 24, 2021](https://coralogix.com/blog/how-to-optimize-your-elasticsearch-queries-using-pagination/)

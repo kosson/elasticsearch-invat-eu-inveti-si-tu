@@ -1,5 +1,7 @@
 # Clientul @elastic/elasticsearch
 
+API-ul de JavaScript poate fi consultat la următoarea pagină: [Elasticsearch JavaScript Client](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/master/index.html).
+
 ## Resurse
 
 - [@elastic/elasticsearch | npmjs](https://www.npmjs.com/package/@elastic/elasticsearch)

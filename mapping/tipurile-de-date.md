@@ -71,13 +71,13 @@ Sunt folosite pentru intervale numerice, de exemplu un interval între 20 și 34
 
 Un exemplu ar fi `{"gte": 10, "lte": 20}`.
 
-## Tipuri complexe
+# Tipuri complexe
 
-### Object Data Type
+## Object Data Type
 
 Acestea sunt obiecte care ajung în Elasticsearch ca obiecte JSON. Acestea pot conține alte obiecte sau array-uri.
 
-## Obiecte cu proprietăți obiecte
+### Obiecte cu proprietăți obiecte
 
 Datele obiectelor ajung în Elasticseach ca obiecte JSON.
 
@@ -104,34 +104,6 @@ Un exemplu ar fi un obiect JSON cu următoarele date:
 ```
 
 În caz că este necesară parametrizarea explicită a unui [obiect](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/object.html#object) prin definirea unui mapping, acest lucru este posibil.
-
-### Array-uri de obiecte
-
-Acestea sunt pur și simplu valorile multiple care pot exista într-un câmp. Atunci când ai array-uri de array-uri, la final, în Elasticsearch vor fi aplatizate într-unul singur.
-
-Nu poți avea array-uri de obiecte pentru că acestea vor fi aplatizate și astfel se vor pierde referințele. Privind la exemplul de mai jos, veți înțelege mai repede.
-
-```json
-{
-	"autori": [
-		{"nume":"Ion", "opere":10},
-		{"nume":"Alina", "opere":7}
-	]
-}
-```
-
-va fi aplatizat în
-
-```json
-{
-	"autori.nume": ["Ion", "Alina"],
-	"autori.opere": [10, 7]
-}
-```
-
-Soluția pentru acest comportament este folosirea de *Nested Data Types* care sunt versiuni specializate ale tipurilor de obiecte și permit ca array-urile de obiecte să fie interogate independent.
-
-Pentru a putea face căutarea va trebui să croiți query-urile într-un mod aparte pentru a interoga aceste obiecte imbricate. Aceste query-uri sunt numite *nested query*, fiind aplicate pe fiecare obiect din array.
 
 ## Geopoint Data Types
 
@@ -203,6 +175,151 @@ PUT /book/_mapping
 	}
 }
 ```
+
+### Array-uri de obiecte
+
+În Elasticseach nu există un tip de date array. Orice câmp poate conține din start zero sau mai multe valori. Totuși, toate valorile din array trebuie să fie de același tip. De exemplu,
+- un array simplu: `['unu', 'doi']`;
+- un array de numere întregi: `[1, 2, 3]`;
+- un array de array-uri: `[1, [2, 3]]`, care este echivalentului lui `[1, 2, 3]`;
+- un array de obiecte: `[{"a": 10}, {"a": 12}]`.
+
+Acestea sunt pur și simplu valorile multiple care pot exista într-un câmp. Atunci când ai array-uri de array-uri, la final, în Elasticsearch vor fi aplatizate într-unul singur.
+
+Nu poți avea array-uri de obiecte pentru că acestea vor fi aplatizate și astfel se vor pierde referințele. Privind la exemplul de mai jos, veți înțelege mai repede.
+
+```json
+{
+	"autori": [
+		{"nume":"Ion", "opere":10},
+		{"nume":"Alina", "opere":7}
+	]
+}
+```
+
+va fi aplatizat în
+
+```json
+{
+	"autori.nume": ["Ion", "Alina"],
+	"autori.opere": [10, 7]
+}
+```
+
+Soluția pentru acest comportament este folosirea de *Nested Data Types* care sunt versiuni specializate ale tipurilor de obiecte și permit ca array-urile de obiecte să fie interogate independent.
+
+Pentru a putea face căutarea va trebui să croiți query-urile într-un mod aparte pentru a interoga aceste obiecte imbricate. Aceste query-uri sunt numite *nested query*, fiind aplicate pe fiecare obiect din array.
+
+## Nested
+
+Acest tip de câmp este o versiune specializată a lui [object](https://www.elastic.co/guide/en/elasticsearch/reference/current/object.html). Acest tip permite indexarea unui array de obiecte, fiind permis un lucru foarte important: interogarea acestora fiecare în parte.
+
+Atunci când se face ingestul unor perechi cheie valoare, cel mai potrivit este să modelezi fiecare pereche cheie valoare drept document distinct nested, care la rândul său are câmpurile proprii. Alternativa ar fi optarea pentru date aplatizate care transformă un obiect întreg într-un câmp unic ceea ce permite căutarea simplă în conținut. Documentele nested consumă mai multe resurse, astfel că datele aplatizate ar fi bine să fie utilizate ori de câte ori se poate.
+
+### Cum sunt aplatizate array-urile de obiecte
+
+În Elastisearch nu există conceptul de obiecte interne. Ceea ce face este să aplatizeze obiectele cu întraga lor ierarhie în simple liste de nume - valori. De exemplu, în cazul indexării următorului obiect,
+
+```text
+PUT my-index-000001/_doc/1
+{
+  "group" : "fans",
+  "user" : [
+    {
+      "first" : "John",
+      "last" :  "Smith"
+    },
+    {
+      "first" : "Alice",
+      "last" :  "White"
+    }
+  ]
+}
+```
+câmpul `user` va fi adăugat în mod dinamic ca unul de tip obiect. În Elasticsearch, obiectul va ajunge în această variantă:
+
+```json
+{
+  "group" :        "fans",
+  "user.first" : [ "alice", "john" ],
+  "user.last" :  [ "smith", "white" ]
+}
+```
+Ceea ce este de observat este că legătura dintre proprietățile obiectelor din array se distruge. La momentul căutării, se va crea o legătură inutilă și nereală între `alice AND smith`.
+
+```text
+GET my-index-000001/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "user.first": "Alice" }},
+        { "match": { "user.last":  "Smith" }}
+      ]
+    }
+  }
+}
+```
+
+### Utilizarea tipului nested
+
+În interiorul Elasticseach obiectele specificate a fi *nested*, vor produce o indexare a fiecărui obiect din array ca documente separate ascunse. Acest lucru înseamnă că fiecare obiect *nested* poate fi interogat în mod independent de celelalte folosind un *nested query*.
+
+```text
+PUT my-index-000001
+{
+  "mappings": {
+    "properties": {
+      "user": {
+        "type": "nested"
+      }
+    }
+  }
+}
+
+GET my-index-000001/_search
+{
+  "query": {
+    "nested": {
+      "path": "user",
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "user.first": "Alice" }},
+            { "match": { "user.last":  "Smith" }}
+          ]
+        }
+      }
+    }
+  }
+}
+
+GET my-index-000001/_search
+{
+  "query": {
+    "nested": {
+      "path": "user",
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "user.first": "Alice" }},
+            { "match": { "user.last":  "White" }}
+          ]
+        }
+      },
+      "inner_hits": {
+        "highlight": {
+          "fields": {
+            "user.first": {}
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+În cazul primei interogări, nu sunt aduse rezultate pentru că `Alice` și `Smith` nu sunt în același obiect nested.
 
 ## Resurse
 

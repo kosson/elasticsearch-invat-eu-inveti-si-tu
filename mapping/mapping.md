@@ -6,7 +6,7 @@ Mapping-ul este procesul prin care definești cum este stocat și indexat un doc
 
 Înainte de a introduce date în Elasticsearch, trebuie să creezi un document care definește corespondențele dintre câmpurile documentului care trebuie indexat și cel care va fi introdus în indexul Elasticseach. Acest document de corepondențe se numește *mapping*. Poți să te gândești la mapping ca la un plan de construcție a unui index. Fiecare index are un *mapping type* care **determină cum vor fi indexate documentele**. Dacă nu este introdus un mapping la momentul indexării, este creat unul din oficiu care va încerca aproximarea structurii pornind de la câmpurile datelor din documentul care trebuie indexat. Apoi această mappare este propagată în toate nodurile unui cluster.
 
-Cân este citit mappingul, ES verifică dacă valoarea câmpului este validă, adică respectă tipul menționat. Dacă respectivul câmp este deja prezent în mapping, dar valoarea este diferită de cea specificată, motorul va încerca să facă o actualizare a mapping-ului pentru a putea acomoda valoarea. De exemplu, dacă în mapping ai specificat un număr întreg și în câmpul documentului de indexat este un long, motorul va face modificarea. Dacă tipurile de date nu sunt compatibile, va fi indicată o stare de excepție și indexarea va eșua. Dacă respectivul câmp nu există, ES va autodetecta tipul câmpului și va permite indexarea.
+Când este citit mappingul, ES verifică dacă valoarea câmpului este validă, adică respectă tipul menționat. Dacă respectivul câmp este deja prezent în mapping, dar valoarea este diferită de cea specificată, motorul va încerca să facă o actualizare a mapping-ului pentru a putea acomoda valoarea. De exemplu, dacă în mapping ai specificat un număr întreg și în câmpul documentului de indexat este un *long*, motorul va face modificarea. Dacă tipurile de date nu sunt compatibile, va fi indicată o stare de excepție și indexarea va eșua. Dacă respectivul câmp nu există, ES va autodetecta tipul câmpului și va permite indexarea.
 
 Pentru a defini datele, se va folosi *dynamic mapping* și *explicit mapping*.
 
@@ -410,7 +410,7 @@ Tipuri de șabloane de protrivire:
 - `match_mapping_type` este opțional și controlează tipurile de câmp;
 - `path_match` este opțional și îți permite să potrivești un template dinamic folosind notația cu punct pentru un câmp. De exemplu, `personal.*.value`;
 - `path_unmatch` este opțional și exclude câmpurile potrivite. Este opusul lui `path_match`;
-- `match_pattern` este opțional și îți permite să faci potriviri folosing regex. În caz contrar, este folosit un glob pattern.
+- `match_pattern` este opțional și îți permite să faci potriviri folosing regex. În caz contrar, este folosit un *glob pattern*.
 
 După cum se observă și în exemplu, se pot folosi înlocuitori speciali:
 - `{name}` acesta va fi înlocuit cu numele câmpului;
