@@ -93,7 +93,7 @@ GET /piese/_search
 
 Pentru fiecare document găsit, va exista o proprietate `matched_queries` care este un array de nume ale fiecărei etape de query pe care a satisfăcut-o.
 
-Aceste interogări se construiesc folosind mai mulți termeni booleani intitulați *typed occurences*. Un posibil exemplu este următorul:
+Aceste interogări se construiesc folosind mai mulți termeni booleani intitulați *typed occurences*. Un posibil exemplu este cel oferit de documentație:
 
 ```json
 {

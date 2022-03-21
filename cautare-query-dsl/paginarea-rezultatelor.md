@@ -82,7 +82,9 @@ Această tehnică de căutare este *stateless*, adică nu este garantată ordine
 
 ## Căutare search_after
 
-Această metodă de căutare are nevoie să fie precizat câmpul de `sort` pentru a putea fi făcută. Valoarea acestui câmp este un array care precizează cum se va face sortarea. În exemplul de mai jos, prima căutare a fost trimisă deja iar aceasta este interogarea următoare care cere următorul corp de 10 înregistrări.
+Pentru a obține primul segment de rezultate, trebuie făcută o cerere care să includă pe lângă câmpul `query` și un câmp `sort`.
+
+Valoarea acestui câmp este un array care precizează cum se va face sortarea. În exemplul de mai jos, prima căutare a fost trimisă deja iar aceasta este interogarea următoare care cere următorul corp de 10 înregistrări.
 
 ```text
 POST http://localhost:9200/un_index/_search
@@ -98,9 +100,9 @@ POST http://localhost:9200/un_index/_search
 }
 ```
 
-Remarcă faptul că există un câmp `sort` care face sortarea înregistrărilor în funcție de data calendaristică la care au fost introduse.
+Remarcă faptul că există un câmp `sort`, care face sortarea înregistrărilor în funcție de data calendaristică la care au fost introduse.
 
-Poți folosi parametrul `search_after` pentru a obține următoarea pagină de hituri folosind un set de valori de sortare care a fost trimis odată cu rezultatelele inițiale de căutare.
+Poți folosi parametrul `search_after` pentru a obține următoarea pagină de hituri folosind un set de valori de sortare, care a fost trimis odată cu rezultatelele inițiale de căutare.
 
 Folosind această tehnică, poți să-i transmiți lui Elasticsearch ultimul hit pe care l-ai văzut pentru a fi ignorate toate celelalte anterioare. Căutarea folosind `search_after` va utiliza un *tiebreaker* (informație necesară stabilirii limitei de la care pornește următorul set de hituri ce va fi adus). Un tiebreaker se comportă ca un semn de carte.
 
@@ -145,7 +147,7 @@ am putea face o sortare similară cu următorul exemplu de mai jos.
 }
 ```
 
-Folosirea lui `search_after` necesită multiple apeluri de căutare folosind același query și valori de sortare. Această tehnică de căutare este *stateless*, adică nu este garantată ordinea rezultatelor atunci când se navighează de la o pagină de rezultate la alta și înapoi. În cazul în care apare un refresh între aceste apeluri, ordinea rezultatelor se poate modifica, fapt care conduce la apariția de rezultate fără consistență între pagini.
+Folosirea lui `search_after` necesită multiple apeluri de căutare folosind același query și valori de sortare. Această tehnică de căutare este *stateless*, adică nu garantează ordinea rezultatelor atunci când se navighează de la o pagină de rezultate la alta și înapoi. În cazul în care apare un refresh între aceste apeluri, ordinea rezultatelor se poate modifica, fapt care conduce la apariția de rezultate fără consistență între pagini.
 
 Pentru a evita acest lucru, se poate crea ceea ce se numește *point in time* ([PIT](https://www.elastic.co/guide/en/elasticsearch/reference/7.x/point-in-time-api.html)), cu rolul de a conserva starea curentă a indexului între căutări.
 
@@ -155,13 +157,15 @@ POST http://localhost:9200/un_index/_pit?keep_alive=1m
 
 ### Adăugarea unui PIT - point in time
 
-Adăugarea unui PIT, transformă o căutare stateless într-una stateful.
+Această opțiune privind căutarea a fost introdusă odată cu versiunea 7.10. Adăugarea unui PIT, transformă o căutare *stateless* într-una *stateful*.
 
-Un PIT este constituit din cele mai recente date vizibile ale unui index. Datele sunt într-o continuă modificare. PIT-ul este o privire asupra datelor la momentul în care este constituit. A fost introdus odată cu versiunea 7.10.
+Un PIT este constituit din cele mai recente date vizibile ale unui index. Datele sunt într-o continuă modificare. PIT-ul este o privire asupra datelor la momentul în care este constituit.
 
 În contextul în care indexul se modifică în continuu, două interogări identice făcute la două momente diferite vor aduce rezultate diferite pentru că datele s-au modificat între timp. PIT-ul oferă un mecanism care elimină factorul variabilității în timp. PIT-ul permite interogarea repetată a unui index așa cum era acesta într-un anumit moment în timp.
 
-În cazul în care se petrece un *refresh* între două căutări `search_after`, rezultatele obținute pot conține modificări. Acest lucru se întâmplă pentru că modificările apărute între căutări sunt vizibile doar celor mai recente PIT-uri. Ceea ce trebuie să faci mai întâi, este să creezi in point-in-time, care va constitui întreg contextul necesar căutărilor multiple viitoare. Ceea ce va obține clientul în urma inițierii PIT-ului este un `id`, care va trebui să-l atașeze tuturor cererilor ulterioare.
+În cazul în care se petrece un *refresh* între două căutări `search_after`, rezultatele obținute pot conține modificări. Acest lucru se întâmplă în cazul adăugării PIT-ului pentru că modificările apărute între căutări sunt vizibile doar celor mai recente PIT-uri.
+
+Pentru a iniția o căutare folosind PIT, este necesar să creezi un point-in-time, care va constitui întreg contextul necesar căutărilor multiple viitoare. Ceea ce va obține clientul în urma inițierii PIT-ului este un `id`, care va trebui să-l atașeze tuturor cererilor ulterioare.
 
 ```text
 POST /my-index-000001/_pit?keep_alive=1m
@@ -183,7 +187,7 @@ Când se creează un PIT, ceea ce se petrece în backend este o operațiune pe s
 
 Lucrurile devin problematice atunci când sunt sute sau mii de cereri. Pentru fiecare va trebui creat un context de căutare și acest lucru va taxa resursele serverului. Dacă ai căutări intense pe un index care se schimbă continuu, probabil că nu este o idee prea bună să creezi câte un PIT pentru fiecare cerere pentru că vor fi create și menținute în viață un număr considerabil de resurse. Soluția este crearea unui proces în aplicație care să creeze câte un PIT la câteva minute, iar acest PIT să fie folosit pentru toate căutările. O tehnică îmbunătățită ar fi combinarea cu `slice`.
 
-Pentru a obține prima pagină cu rezultate, trimite o cerere de căutare cu un argument `sort`. În cazul în care folosești PIT, specifică-l în `pit.id` dar NU menționa *target data stream*-ul sau numele indexul. Un exemplu este mai jos.
+Pentru a obține prima pagină cu rezultate, trimite o cerere de căutare cu un argument `sort`. În cazul în care folosești PIT, specifică-l în `pit.id`, dar NU menționa *target data stream*-ul sau numele indexul. Un exemplu este mai jos.
 
 ```json
 {
@@ -403,6 +407,86 @@ Resursele trebuie eliberate la finalul utilizării lor în interfață pentru c�
 Menținerea în viață a segmentelor care nu sunt necesare pentru a avea la dispoziție date în timp real înseamnă alocarea de spațiu mai mult pe disc pentru a ține în viață segmentele. Acestea nu pot fi șterse până când nu este șters id-ul de scroll.
 
 Reține un lucru foarte important: căutarea în baza unui scroll, împreună cu tot contextul pe care-l formează, este legată de o cerere de căutare (*query*). Astfel, vei obține un set de date consistent. Pentru cazul în care dorești să rulezi mai multe interogări de căutare folosind același set de date, folosești Point-In-Time. Structura pe care o creează PIT-ul este dedicată activităților de căutare multiple pe același set.
+
+## Căutare folosind axios
+
+Este posibil ca în cazul folosirii clientului Node.js să înregistrezi întârzieri în căutare. Aici este un caz explicat: https://discuss.elastic.co/t/node-js-elasticsearch-search-latency-degrades-over-time-within-hours/230948/4.
+
+```javascript
+const https = require('https');
+const {Client} = require('@elastic/elasticsearch');
+const Queue = require('promise-queue');
+const apiErrors = require('../api-errors');
+
+const queue = new Queue(10, 200);
+
+const ttl = 1000 * 60 * 10;
+
+let lastTime = Date.now();
+
+let client;
+
+const createClient = () => {
+    return new Client({
+        cloud: {
+            id: process.env.ELASTICSEARCH_CLOUD_ID
+        },
+        auth: {
+            username: process.env.ELASTICSEARCH_USERNAME,
+            password: process.env.ELASTICSEARCH_PASSWORD
+        },
+        maxRetries: 2,
+        requestTimeout: 2000,
+        agent: () => {
+            return new https.Agent({
+                keepAlive: true,
+                timeout: 500,
+                maxFreeSockets: 10,
+                maxSockets: 50
+            });
+        }
+    });
+};
+
+const getClient = () => {
+    const now = Date.now();
+    const currentClient = client;
+
+    if (!client) {
+        client = createClient();
+    } else if (currentClient && (now - lastTime) > ttl) {
+        lastTime = now;
+        client = createClient();
+
+        currentClient.close();
+    }
+
+    return client;
+};
+
+module.exports = async ({index, body}) => {
+    return queue.add(() => {
+        return getClient().search({
+            index,
+            body,
+            request_cache: false,
+            track_total_hits: false,
+            allow_partial_search_results: false,
+            timeout: '2000ms'
+        }).catch((error) => {
+            if (!error.meta) {
+                throw apiErrors.elasticsearchTimeout();
+            } else {
+                throw apiErrors.elasticsearchFailed({
+                    message: error.meta.body.error.type,
+                    details: error.meta.body.error.reason,
+                    status: error.meta.statusCode
+                });
+            }
+        });
+    });
+};
+```
 
 ## Resurse
 

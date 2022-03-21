@@ -98,7 +98,7 @@ Atunci când ai nevoie să cauți toți termenii în ordinea în care au fost me
 
 #### multi-match
 
-Acest query permite rularea aceluiași query pe mai multe câmpuri.
+Acest query permite rularea aceluiași query pe mai multe câmpuri pe care le specifici la `fields`.
 
 ```json
 {
@@ -223,3 +223,4 @@ Condițiile care trebuie îndeplinite:
 
 - [Deep Dive into Querying Elasticsearch. Filter vs Query. Full-text search](https://towardsdatascience.com/deep-dive-into-querying-elasticsearch-filter-vs-query-full-text-search-b861b06bd4c0)
 - [Text Classification made easy with Elasticsearch](https://www.elastic.co/blog/text-classification-made-easy-with-elasticsearch)
+- [Boolean query with elasticsearch – Influence Elasticsearch Scoring – Part 1](https://spoon-elastic.com/all-elastic-search-post/advanced-usage/boolean-query-with-elasticsearch-influence-elasticsearch-scoring-part-1/)
